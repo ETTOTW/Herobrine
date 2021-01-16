@@ -10,7 +10,7 @@ title:  Team
 ***UCI Net ID***: ucinetid1
 
 ## USER 2
-***UCI Net ID***: Yilongh1@uci.edu
+***UCI Net ID***: yilongh1
 
 ## USER 3
 ***UCI Net ID***: yachil
