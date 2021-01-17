@@ -7,7 +7,7 @@ title:  Team
 
 
 ## Jason Li
-***UCI Net ID***: ucinetid1
+***UCI Net ID***: taichenl
 
 ## Yilong Huang
 ***UCI Net ID***: yilongh1
