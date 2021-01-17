@@ -6,11 +6,11 @@ title:  Team
 # Team Members
 
 
-## USER 1
+## Jason Li
 ***UCI Net ID***: ucinetid1
 
-## USER 2
+## Yilong Huang
 ***UCI Net ID***: yilongh1
 
-## USER 3
+## Ya-Chi Lee
 ***UCI Net ID***: yachil
