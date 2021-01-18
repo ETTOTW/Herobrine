@@ -4,7 +4,7 @@ title: Proposal
 ---
 
 ## Summary of the Project
-The project will train our game agent to deliver resources to survivors in an extremely dangerous world after the outbreak of an unknown zombie virus. Each survivor will have a corresponding resource. Our agent needs to avoid the attacks from zombies and distribute all resources as efficiently as possible. In this scenario, our agent not only needs to learn how to avoid zombies but also needs to find the shorter path between multiple and deliveries. We will utilize Minecraft to visualize the situation.
+The project will train our game agent to deliver resources to survivors in an extremely dangerous world after the outbreak of an unknown zombie virus. Each survivor will have a corresponding resource. Our agent needs to avoid the attacks from zombies and distribute all resources as efficiently as possible. In this scenario, our agent not only needs to learn how to avoid zombies but also needs to find the shorter path. We will utilize Minecraft to visualize the situation.
 
 
 ## AI/ML Algorithms
