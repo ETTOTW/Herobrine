@@ -9,29 +9,17 @@ The project will train our game agent to deliver resources to survivors in an ex
 
 ## Assumptions
 1. The test ground is a 100 * 100 grid map
-
 2. Each grid is 5 * 5
-
 3. Different Blocks represents the different cost of each path:
-
     - Start Point: Redstone block
-
     - Delivery Point: Emerald
-    
     - Basic Path: Diamond
-    
     - Faster Path: Ice, Minecart
-    
     - Slower Path: Soul Sand
-    
     - Unavailable Path: Air
-
 4. Randomness
-
-    - The initial map will be consist of diamond blocks 
-    
+    - The initial map will be consist of diamond blocks
     - Sides of grids will be replaced randomly with blocks mentioned above
-
 
 
 ## AI/ML Algorithms
