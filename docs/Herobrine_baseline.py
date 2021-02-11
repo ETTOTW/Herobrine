@@ -11,27 +11,92 @@ import random
 from priority_dict import priorityDictionary as PQ
 
 
-block_dict = {
-    0: 'diamond_ore',  # base path
-    1: 'packed_ice',  # faster
-    2: 'soul_sand',  # slower
-    3: 'Emerald', # start
-    4: 'redstone_block' # end
-}
-
 class MineExpressBaseline():
-    def __init__(self, env_config):  
+    def __init__(self):  
         # Static Parameters
         self.size = 10
+        self.up_down_dist = self.size*4+5
         self.action_dict = {
             0: 'movenorth 1',
             1: 'movesouth 1',
             2: 'moveeast 1',
             3: 'movewest 1'
         }
+        self.block_dict = {
+            "base": 'diamond_ore',
+            "faster": 'packed_ice',
+            "slower": 'soul_sand', 
+            "start": 'emerald_block',
+            "end": 'redstone_block'
+        }
+        
+        
+    def find_start_end(self, grid):
+        s,e = -1,-1
+        for i in range(len(grid)):
+            if grid[i] == self.block_dict["start"]:
+                s = i
+            elif grid[i] == self.block_dict["end"]:
+                e = i
+        return (s, e)
+        
+        
+    def extract_action_list_from_path(self, path_list):
+        action_trans = {-self.up_down_dist: 'movenorth 1', self.up_down_dist: 'movesouth 1', -1: 'movewest 1', 1: 'moveeast 1'}
+        alist = []
+        for i in range(len(path_list) - 1):
+            curr_block, next_block = path_list[i:(i + 2)]
+            alist.append(action_trans[next_block - curr_block])
+        
+        return alist
+        
+        
+    def dijkstra_shortest_path(self, grid_obs, source, dest):
+        pre_grids = PQ()
+        grid_dist = PQ()
+        grid_dist[source] = 0
+        pre_grids[source] = -1
+        while grid_dist:
+            cur = grid_dist.smallest()
+            for g in [-self.up_down_dist,self.up_down_dist,-1,1]:
+                g+=cur
+                if g not in pre_grids and grid_obs[g] != "air":
+                    if g not in grid_dist or grid_dist[g] > grid_dist[cur]+1:
+                        grid_dist[g] = grid_dist[cur]+1
+                        pre_grids[g] = cur
+            del grid_dist[cur]
+        result = []
+        cur = dest
+        while pre_grids[cur] != -1:
+            result.insert(0,cur)
+            cur = pre_grids[cur]
+        result.insert(0,source)
+        return result
+        
+    def run(self, world_state):
+        while world_state.is_mission_running:
+            #sys.stdout.write(".")
+            time.sleep(0.1)
+            world_state = agent_host.getWorldState()
+            if len(world_state.errors) > 0:
+                raise AssertionError('Could not load grid.')
+        
+            if world_state.number_of_observations_since_last_state > 0:
+                msg = world_state.observations[-1].text
+                observations = json.loads(msg)
+                grid = observations.get(u'floorAll', 0)
+                break
+            
+        start, end = self.find_start_end(grid)
+        print("Output (start,end)", (i+1), ":", (start,end))
+        path = self.dijkstra_shortest_path(grid, start, end)
+        print("Output (path length)", (i+1), ":", len(path))
+        action_list = self.extract_action_list_from_path(path)
+        
+        return action_list
         
 
-def GetMissionXML(size=5, start=(None,None), end=(None,None)):
+def GetMissionXML(size=10, start=(None,None), end=(None,None)):
     blockPosXML = ""
     for x in range(-size, size+1):
         for z in range(-size, size+1):
@@ -45,9 +110,9 @@ def GetMissionXML(size=5, start=(None,None), end=(None,None)):
     
     # set start and end position
     if start == (None,None):
-        start = (random.randint(-size, size+1),random.randint(-size, size+1))
+        start = (random.randint(-size, size),random.randint(-size, size))
     if end == (None,None):
-        end = (random.randint(-size, size+1),random.randint(-size, size+1))
+        end = (random.randint(-size, size),random.randint(-size, size))
     
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -101,64 +166,6 @@ def GetMissionXML(size=5, start=(None,None), end=(None,None)):
             </Mission>'''
 
 
-def load_grid(world_state):
-    while world_state.is_mission_running:
-        #sys.stdout.write(".")
-        time.sleep(0.1)
-        world_state = agent_host.getWorldState()
-        if len(world_state.errors) > 0:
-            raise AssertionError('Could not load grid.')
-
-        if world_state.number_of_observations_since_last_state > 0:
-            msg = world_state.observations[-1].text
-            observations = json.loads(msg)
-            grid = observations.get(u'floorAll', 0)
-            break
-    return grid
-
-def find_start_end(grid):
-    s = -1
-    e = -1
-    for i in range(len(grid)):
-        if grid[i] == "emerald_block":
-            s = i
-        elif grid[i] == "redstone_block":
-            e = i
-    return (s, e)
-
-
-def extract_action_list_from_path(path_list):
-    action_trans = {-25: 'movenorth 1', 25: 'movesouth 1', -1: 'movewest 1', 1: 'moveeast 1'}
-    alist = []
-    for i in range(len(path_list) - 1):
-        curr_block, next_block = path_list[i:(i + 2)]
-        alist.append(action_trans[next_block - curr_block])
-
-    return alist
-
-
-def dijkstra_shortest_path(grid_obs, source, dest):
-    pre_grids = PQ()
-    grid_dist = PQ()
-    grid_dist[source] = 0
-    pre_grids[source] = -1
-    while grid_dist:
-        cur = grid_dist.smallest()
-        for g in [-25,25,-1,1]:
-            g+=cur
-            if g not in pre_grids and grid_obs[g] != "air":
-                if g not in grid_dist or grid_dist[g] > grid_dist[cur]+1:
-                    grid_dist[g] = grid_dist[cur]+1
-                    pre_grids[g] = cur
-        del grid_dist[cur]
-    result = []
-    cur = dest
-    while pre_grids[cur] != -1:
-        result.insert(0,cur)
-        cur = pre_grids[cur]
-    result.insert(0,source)
-    return result
-
 
 # Create default Malmo objects:
 agent_host = MalmoPython.AgentHost()
@@ -210,12 +217,9 @@ for i in range(num_repeats):
     print()
     print("Mission", (i+1), "running.")
 
-    grid = load_grid(world_state)
-    start, end = find_start_end(grid)
-    path = dijkstra_shortest_path(grid, start, end)
-    action_list = extract_action_list_from_path(path)
-    print("Output (start,end)", (i+1), ":", (start,end))
-    print("Output (path length)", (i+1), ":", len(path))
+    agent = MineExpressBaseline()
+    action_list = agent.run(world_state)
+
     print("Output (actions)", (i+1), ":", action_list)
     # Loop until mission ends:
     action_index = 0
