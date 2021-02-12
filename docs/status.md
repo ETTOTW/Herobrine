@@ -6,11 +6,12 @@ title:  Status
 ## Food Delivery Service Project
 
 ## Project summary
-Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 20 * 20 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of different kinds of blocks,such as Stone, Ice, and Soul Sand, to give agents different speed properties in the different paths. We train our client by machine learning algorithm to reach our goal.
+Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 20 * 20 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of different kinds of blocks,such as Stone, Ice, and Soul Sand, to give agents different speed properties in the different paths. We train our client by machine learning algorithm to reach our goal. 
+<img src="baseline1.png">
 ## Approach
 We use the q-learning algorithm to train the client.  Our q-table has a state number that corresponds to the non-air block number. Our actions include up, down, left, and right. 
 For each iteration, we update our q value according to the algorithm:
-
+<img src="q-learning.png">
 Our reward function for now just gives a high reward to the path from blocks near destination to the destination. We will adjust it in the future. By doing this, we guarantee that our rewards are updated for every iteration from states to other states. 
 Start Point: Redstone block
 Delivery Point: Emerald
