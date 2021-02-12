@@ -2,11 +2,12 @@
 layout: default
 title:  Status
 ---
-Food Delivery Service Project
 
-Project summary
+## Food Delivery Service Project
+
+## Project summary
 Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 20 * 20 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of different kinds of blocks,such as Stone, Ice, and Soul Sand, to give agents different speed properties in the different paths. We train our client by machine learning algorithm to reach our goal.
-Approach
+## Approach
 We use the q-learning algorithm to train the client.  Our q-table has a state number that corresponds to the non-air block number. Our actions include up, down, left, and right. 
 For each iteration, we update our q value according to the algorithm:
 
@@ -16,7 +17,7 @@ Delivery Point: Emerald
 Common Speed: Diamond
 Speed Up: Ice, Minecart
 Speed Down: Soul Sand
-Evaluation
+## Evaluation
 Our baseline chooses the shortest path regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. 
 
 The algorithm we are utilizing is (To Be determined) by using (TBD) library. 
