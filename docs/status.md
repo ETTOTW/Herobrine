@@ -3,8 +3,6 @@ layout: default
 title:  Status
 ---
 
-## Food Delivery Service Project
-
 ## Project summary
 Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 16 * 16 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of soul sand or diamond block, to give agents different speed properties in the different paths. We train our agent by machine learning algorithm to reach our goal.
 
@@ -30,24 +28,28 @@ Our reward function for now just gives a high reward to the path from blocks nea
 
 
 ## Evaluation
-
 Quantitative:
-We have implemented the baseline agent. The baseline’s only metric is distance regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. 
+We have implemented the baseline agent. The baseline’s only metric is distance regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. The image below shows the output for our baseline. 
+
+<img src="image/baseline_output.jpg" width="500" >
 
 Qualitative:
 The sanity check below shows a case that our baseline fails. It goes straight from the start point (in green) to the destination (in red) because it does not consider the running time. Our final agent should choose the left-hand side path instead because diamond blocks on the left give it a higher speed, thus it can reach the destination quicker.
 
+<img src="image/test1BaseLineFailed.jpg" width="500" >
+
 
 ## Remaining Goals and Challenges
-Need more time to do the training (The algorithm cost long time to train, we hope to find the balance between the running time and the performance)
-We hope to improve our simple reward function to improve the performance.
-We will test more QL input such as the learning rate.
-Need optimization to improve performance and time consumption
-We are currently evaluating our agent’s performance by only distance travelled, and we will add other factors into consideration like block types (meaning the traveling speed), and amount of waiting time of all customers. 
-We will expand our map to 10*10 later. 
-Multiple agents to deliver our resources, and we will consider queuing algorithms later. 
-Resources:
-Q-learning library  https://pypi.org/project/pyqlearning/
-Assignment one from CS 175
-Q table from Python Tutorial
+1. The algorithm costs a long time to train, we aim to find the balance between the running time and the performance.
+2. We hope to improve our reward function in response to different moving speeds of blocks.
+3. We will test more QL input parameters such as the learning rate to improve performance.
+4. We will modify the output to have a better comparison between baseline and final performance.
+
+
+## Resources Used
+- Q-learning library  https://pypi.org/project/pyqlearning/
+- Q learning tutorial https://www.youtube.com/watch?v=aCEvtRtNO-M
+- Assignment 1 from CS 175
+- tabular_q_learning from malmo example
+- XML Schema Documentation https://microsoft.github.io/malmo/0.30.0/Schemas/Mission.html
 
