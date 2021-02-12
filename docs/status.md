@@ -8,23 +8,22 @@ Our project aims to find a path that minimizes the time travel to a randomized d
 
 <img src="image/baseline1.png">
 
-Start Point: Redstone block
-End Point: Emerald
-Common Speed: Diamond
-Speed Down: Soul Sand
+Block Type:
+- Start Point: Redstone Block
+- End Point: Emerald Block
+- Common Speed: Diamond Block
+- Speed Down: Soul Sand
 
 <img src="image/blocks_type.png" width="500" >
 
 
 ## Approach
-We use the q-learning algorithm to train the client.  Our q-table has a state number that corresponds to the non-air block number. Our actions include up, down, left, and right. 
+We use the q-learning algorithm and ε-greedy method to train our agent. Our q-table has a state number that corresponds to the non-air block number. We have 4 actions that include up, down, left, and right. 
 For each iteration, we update our q value according to the algorithm:
 
 <img src="image/q-learning.png" width="500" >
 
-For now, we just give a high reward when our agent reaches the destination. We will adjust it in the future. The function also gives a negative reward when the agent falls to the lava and when time passes. To achieve this, we use <RewardForTouchingBlockType> and <RewardForTimeTaken> in our mission XML file.
-  
-Our reward function for now just gives a high reward to the path from blocks near destination to the destination. We will adjust it in the future. By doing this, we guarantee that our rewards are updated for every iteration from states to other states. 
+For now, we just give a high reward when our agent reaches the destination. We will adjust it in the future. The function also gives negative rewards when the agent falls to the lava and when time passes. To achieve this, we use <RewardForTouchingBlockType> and <RewardForTimeTaken> in our mission XML file.
 
 
 ## Evaluation
