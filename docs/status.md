@@ -11,7 +11,8 @@ Our project aims to find a path that minimizes the time travel to a randomized d
 ## Approach
 We use the q-learning algorithm to train the client.  Our q-table has a state number that corresponds to the non-air block number. Our actions include up, down, left, and right. 
 For each iteration, we update our q value according to the algorithm:
-<img src="q-learning.png">
+<img src="q-learning.png" width="700" >
+
 Our reward function for now just gives a high reward to the path from blocks near destination to the destination. We will adjust it in the future. By doing this, we guarantee that our rewards are updated for every iteration from states to other states. 
 Start Point: Redstone block
 Delivery Point: Emerald
