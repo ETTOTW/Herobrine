@@ -11,9 +11,8 @@ Our project aims to find a path that minimizes the time travel to a randomized d
 <img src="image/baseline1.png">
 
 Start Point: Redstone block
-Delivery Point: Emerald
+End Point: Emerald
 Common Speed: Diamond
-Speed Up: Ice, Minecart
 Speed Down: Soul Sand
 
 <img src="image/blocks_type.png" width="500" >
@@ -31,14 +30,15 @@ Our reward function for now just gives a high reward to the path from blocks nea
 
 
 ## Evaluation
-Our baseline chooses the shortest path regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. 
 
-The algorithm we are utilizing is (To Be determined) by using (TBD) library. 
-The core task of this mission is to save our client within a fast amount of time, so the evaluation is highly based on the waiting. The 
-Quantitive:
-(Image to be inserted)
-(Chart or Graph TBD)
-Remaining Goals and Challenges
+Quantitative:
+We have implemented the baseline agent. The baseline’s only metric is distance regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. 
+
+Qualitative:
+The sanity check below shows a case that our baseline fails. It goes straight from the start point (in green) to the destination (in red) because it does not consider the running time. Our final agent should choose the left-hand side path instead because diamond blocks on the left give it a higher speed, thus it can reach the destination quicker.
+
+
+## Remaining Goals and Challenges
 Need more time to do the training (The algorithm cost long time to train, we hope to find the balance between the running time and the performance)
 We hope to improve our simple reward function to improve the performance.
 We will test more QL input such as the learning rate.
