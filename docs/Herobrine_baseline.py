@@ -8,14 +8,18 @@ import sys
 import time
 import json
 import random
+import numpy as np
 from priority_dict import priorityDictionary as PQ
 
 
 class MineExpressBaseline():
     def __init__(self):  
         # Static Parameters
-        self.size = 10
+        self.size = 8
         self.up_down_dist = self.size*4+5
+        self.grid = []
+        self.start = -1
+        self.end = -1
         self.action_dict = {
             0: 'movenorth 1',
             1: 'movesouth 1',
@@ -24,21 +28,19 @@ class MineExpressBaseline():
         }
         self.block_dict = {
             "base": 'diamond_ore',
-            "faster": 'packed_ice',
-            "slower": 'soul_sand', 
+            "slower1": 'packed_ice',
+            "slower2": 'soul_sand', 
             "start": 'emerald_block',
             "end": 'redstone_block'
         }
         
         
-    def find_start_end(self, grid):
-        s,e = -1,-1
-        for i in range(len(grid)):
-            if grid[i] == self.block_dict["start"]:
-                s = i
-            elif grid[i] == self.block_dict["end"]:
-                e = i
-        return (s, e)
+    def find_start_end(self):
+        for i in range(len(self.grid)):
+            if self.grid[i] == self.block_dict["start"]:
+                self.start = i
+            elif self.grid[i] == self.block_dict["end"]:
+                self.end = i
         
         
     def extract_action_list_from_path(self, path_list):
@@ -51,26 +53,26 @@ class MineExpressBaseline():
         return alist
         
         
-    def dijkstra_shortest_path(self, grid_obs, source, dest):
+    def dijkstra_shortest_path(self):
         pre_grids = PQ()
         grid_dist = PQ()
-        grid_dist[source] = 0
-        pre_grids[source] = -1
+        grid_dist[self.start] = 0
+        pre_grids[self.start] = -1
         while grid_dist:
             cur = grid_dist.smallest()
             for g in [-self.up_down_dist,self.up_down_dist,-1,1]:
                 g+=cur
-                if g not in pre_grids and grid_obs[g] != "air":
+                if g not in pre_grids and self.grid[g] != "air":
                     if g not in grid_dist or grid_dist[g] > grid_dist[cur]+1:
                         grid_dist[g] = grid_dist[cur]+1
                         pre_grids[g] = cur
             del grid_dist[cur]
         result = []
-        cur = dest
+        cur = self.end
         while pre_grids[cur] != -1:
             result.insert(0,cur)
             cur = pre_grids[cur]
-        result.insert(0,source)
+        result.insert(0,self.start)
         return result
         
     def run(self, world_state):
@@ -84,36 +86,56 @@ class MineExpressBaseline():
             if world_state.number_of_observations_since_last_state > 0:
                 msg = world_state.observations[-1].text
                 observations = json.loads(msg)
-                grid = observations.get(u'floorAll', 0)
+                self.grid = observations.get(u'floorAll', 0)
                 break
             
-        start, end = self.find_start_end(grid)
-        print("Output (start,end)", (i+1), ":", (start,end))
-        path = self.dijkstra_shortest_path(grid, start, end)
+        self.find_start_end()
+        print("Output (start,end)", (i+1), ":", (self.start,self.end))
+        path = self.dijkstra_shortest_path()
         print("Output (path length)", (i+1), ":", len(path))
         action_list = self.extract_action_list_from_path(path)
         
         return action_list
         
 
-def GetMissionXML(size=10, start=(None,None), end=(None,None)):
-    blockPosXML = ""
-    for x in range(-size, size+1):
-        for z in range(-size, size+1):
-            p = random.random()
-            if p < 0.4:
-                blockPosXML += "<DrawBlock x='{}'  y='5' z='{}' type='packed_ice' />".format(x,z)
-            elif p < 0.8:
-                blockPosXML += "<DrawBlock x='{}'  y='5' z='{}' type='soul_sand' />".format(x,z)
-            else:
-                blockPosXML += "<DrawBlock x='{}'  y='5' z='{}' type='diamond_block' />".format(x,z)
+def GetMissionXML(size=8):
+    map = np.zeros((16, 16))
+        
+    for i in range(0, 16, 3):
+        map[i] = np.ones(16)
+        map[:, i] = np.ones(16)
+        
+        for j in range(1, 14, 3):
+            map[i, j:j + 2] = list(np.random.binomial(1, 0.25, 1) + 1) * 2
+            map[j:j + 2, i] = list(np.random.binomial(1, 0.25, 1) + 1) * 2
     
-    # set start and end position
-    if start == (None,None):
-        start = (random.randint(-size, size),random.randint(-size, size))
-    if end == (None,None):
-        end = (random.randint(-size, size),random.randint(-size, size))
+    spawnPoint = np.random.randint(0, 7, 2)
+    while (map[spawnPoint[0], spawnPoint[1]] == 0):
+        spawnPoint = np.random.randint(0, 7, 2)
     
+    endPoint = np.random.randint(8, 15, 2)
+    while (map[endPoint[0], endPoint[1]] == 0):
+        endPoint = np.random.randint(8, 15, 2)
+    
+    mapXML = ""
+    
+    for x in range(size, -size, -1):
+        for y in range(size, -size, -1):
+            
+            if map[x + size - 1][y + size - 1] == 0:
+                mapXML += f"<DrawBlock x='{x}'  y='10' z='{y}' type='air' />"
+            
+            elif x + size - 1 == spawnPoint[0] and y + size - 1 == spawnPoint[1]:
+                mapXML += f"<DrawBlock x='{x}'  y='10' z='{y}' type='emerald_block' />"
+            elif x + size - 1 == endPoint[0] and y + size - 1 == endPoint[1]:
+                mapXML += f"<DrawBlock x='{x}'  y='10' z='{y}' type='redstone_block' />"
+            
+            elif map[x + size - 1][y + size - 1] == 1:
+                mapXML += f"<DrawBlock x='{x}'  y='10' z='{y}' type='diamond_block' />"
+            
+            elif map[x + size - 1][y + size - 1] == 2:
+                mapXML += f"<DrawBlock x='{x}'  y='10' z='{y}' type='soul_sand' />"
+
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -132,10 +154,8 @@ def GetMissionXML(size=10, start=(None,None), end=(None,None)):
               <ServerHandlers>
                   <FlatWorldGenerator generatorString="3;7,11;1;"/>
                   <DrawingDecorator>''' + \
-                      "<DrawCuboid x1='{}' x2='{}' y1='2' y2='6' z1='{}' z2='{}' type='air'/>".format(-size, size, -size, size) + \
-                      blockPosXML + \
-                      "<DrawBlock x='{}' y='5' z='{}' type='emerald_block'/>".format(start[0], start[1]) + \
-                      "<DrawBlock x='{}' y='5' z='{}' type='redstone_block'/>".format(end[0], end[1]) + \
+                      "<DrawCuboid x1='{}' x2='{}' y1='2' y2='11' z1='{}' z2='{}' type='air'/>".format(-size, size, -size, size) + \
+                      mapXML + \
                       '''
                   </DrawingDecorator>
                   <ServerQuitFromTimeUp timeLimitMs="10000"/>
@@ -146,7 +166,7 @@ def GetMissionXML(size=10, start=(None,None), end=(None,None)):
               <AgentSection mode="Survival">
                 <Name>Mineclient</Name>
                 <AgentStart>''' + \
-                    "<Placement x='{}' y='6' z='{}' yaw='0'/>".format(start[0]+0.5,start[1]+0.5) + \
+                    "<Placement x='{}' y='11' z='{}' yaw='0'/>".format(spawnPoint[0]-size+1.5,spawnPoint[1]-size+1.5) + \
                     '''
                 </AgentStart>
                 <AgentHandlers>
