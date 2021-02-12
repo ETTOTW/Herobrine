@@ -3,6 +3,11 @@ layout: default
 title:  Home
 ---
 
+<img src="image/home_images.jpeg" width="600" >
+
+MineExpress is a reinforcement learning/Q-learning related project. An agent that starts a random position will go to a random destination within the minimum amount of time and avoid dropping into the lava. The path contains blocks with different moving speeds, thus we train our agent to find the optimal path. We will utilize Minecraft and Malmo to visualize our project. 
+
+
 Source code: https://github.com/yachilee/herobrine
 
 Reports:
@@ -10,31 +15,3 @@ Reports:
 - [Proposal](proposal.html)
 - [Status](status.html)
 - [Final](final.html)
-
-What's Markdown (`.md`)?
-
-Markdown is markup that lets you write hypertext (HTML) documents
-in easy-to-read and easy-to-write plain text.
-No angle brackets `<></>` required for
-paragraphs, lists, blockquotes, tables, etc.
-
-
-This is a paragraph (in Markdown). Some more
-text here.
-
-This is another paragraph.
-
-This is a list:
-
-- Orange
-- Apple
-- Blueberry
-
-$$x^2 = y^2$$
-
-
-Just getting started with Markdown?
-See the [HTML <-> Markdown Quick Reference (Cheat Sheet)][quickref].
-
-
-[quickref]: https://github.com/mundimark/quickrefs/blob/master/HTML.md
