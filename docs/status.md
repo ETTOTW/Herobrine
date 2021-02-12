@@ -22,6 +22,7 @@ Delivery Point: Emerald
 Common Speed: Diamond
 Speed Up: Ice, Minecart
 Speed Down: Soul Sand
+<img src="blocks_type.png" width="500" >
 ## Evaluation
 Our baseline chooses the shortest path regardless of the block type and time cost. It picks a random path if more than one path is the shortest one. We used the Dijkstra algorithm from assignment 1. It ensures that the agent is traveling within the minimum amount of distance. 
 
