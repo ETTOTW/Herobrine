@@ -14,7 +14,7 @@ Block Type:
 - Common Speed: Diamond Block
 - Speed Down: Soul Sand
 
-<img src="image/blocks_type.png" width="500" >
+<img src="image/blocks_type.png">
 
 A simple demo for the final project:
 
