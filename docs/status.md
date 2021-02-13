@@ -18,8 +18,10 @@ Block Type:
 
 A simple demo for the final project:
 
-## Approach
-We use the q-learning algorithm and ε-greedy method to train our agent. Our q-table has a state number that corresponds to the non-air block number. We have 4 actions that include up, down, left, and right. 
+<iframe width="854" height="480" src="https://www.youtube.com/embed/99FBifaPOyQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Approach
+We use the q-learning algorithm and ε-greedy method to train our agents. Our q-table has a state number that corresponds to the non-air block number. We have 4 actions that include up, down, left, and right. 
 For each iteration, we update our q value according to the algorithm:
 
 <img src="image/q-learning.png" width="500" >
