@@ -9,8 +9,8 @@ Our project aims to find a path that minimizes the time travel to a randomized d
 <img src="image/baseline1.png">
 
 Block Type:
-- Start Point: Redstone Block
-- End Point: Emerald Block
+- Start Point: Emerald Block
+- End Point: Redstone Block
 - Common Speed: Diamond Block
 - Speed Down: Soul Sand
 
