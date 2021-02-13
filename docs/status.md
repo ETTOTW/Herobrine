@@ -3,6 +3,8 @@ layout: default
 title:  Status
 ---
 
+<iframe width="854" height="480" src="https://www.youtube.com/embed/gAnfkpYpiSI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### Project summary
 Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 16 * 16 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of soul sand or diamond block, to give agents different speed properties in the different paths. We train our agents by machine learning algorithms to reach our goal.
 
