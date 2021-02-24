@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <About>
+        <Summary>Mine Express</Summary>
+    </About>
+    <ServerSection>
+        <ServerInitialConditions>
+            <Time>
+                <StartTime>12000</StartTime>
+                <AllowPassageOfTime>false</AllowPassageOfTime>
+            </Time>
+            <Weather>clear</Weather>
+        </ServerInitialConditions>
+        <ServerHandlers>
+            <FlatWorldGenerator generatorString="3;1*minecraft:bedrock,1*minecraft:lava;0;"/>
+            <DrawingDecorator>
+
+            </DrawingDecorator>
+            <ServerQuitWhenAnyAgentFinishes/>
+        </ServerHandlers>
+    </ServerSection>
+    <AgentSection mode="Survival">
+        <Name>CS175DiamondCollector</Name>
+        <AgentStart>
+            <!--<Placement/>-->
+        </AgentStart>
+        <AgentHandlers>
+            <RewardForTouchingBlockType>
+                <Block type="redstone_block" reward="100"/>
+                <Block type="diamond_block" reward="-1" behaviour="oncePerTimeSpan"/>
+                <Block type="soul_sand" reward="-3" behaviour="oncePerTimeSpan"/>
+                <Block type="barrier" reward="-5"/>
+            </RewardForTouchingBlockType>
+            <RewardForTimeTaken initialReward="100" delta="-0.05" density="MISSION_END"/>
+            <DiscreteMovementCommands/>
+            <ObservationFromFullStats/>
+            <ObservationFromGrid>
+                <Grid name="floor" absoluteCoords="true">
+                    <!--<min/><max/>-->
+                </Grid>
+            </ObservationFromGrid>
+            <AgentQuitFromTimeUp timeLimitMs="100000"/>
+            <AgentQuitFromTouchingBlockType>
+                <Block type="barrier"/>
+                <Block type="redstone_block"/>
+            </AgentQuitFromTouchingBlockType>
+        </AgentHandlers>
+    </AgentSection>
+</Mission>
