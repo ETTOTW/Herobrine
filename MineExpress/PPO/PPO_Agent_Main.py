@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from scipy.spatial import distance
 from gym.spaces import Discrete, Box
 from ray.rllib.agents import ppo
-
+from gym.envs.toy_text import discrete
 
 class MineExpress(gym.Env):
     
@@ -101,7 +101,7 @@ class MineExpress(gym.Env):
     
     def getMission(self):
         
-        mission = MalmoUtils.MissionHandler("../mission.xml")
+        mission = MalmoUtils.MissionHandler("mission.xml")
         
         mission.insert("DrawingDecorator", "DrawCuboid", x1=f"{-1}", x2=f"{self.field_size}", y1=f"{9}", y2=f"{9}",
                        z1=f"{-1}", z2=f"{self.field_size}", type='barrier')
