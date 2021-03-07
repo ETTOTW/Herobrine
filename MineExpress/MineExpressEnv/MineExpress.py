@@ -24,15 +24,15 @@ class MineExpress(gym.Env):
     
     Package Status:
         0: (0, 0)
-        1: (0, 4)
-        2: (4, 0)
+        1: (4, 0)
+        2: (0, 4)
         3: (4, 3)
         4: out for delivery
     
     Package Destination:
         0: (0, 0)
-        1: (0, 4)
-        2: (4, 0)
+        1: (4, 0)
+        2: (0, 4)
         3: (4, 3)
         
     """
@@ -48,7 +48,7 @@ class MineExpress(gym.Env):
              [(2.5, 32.5), (12.5, 32.5), (22.5, 32.5), (32.5, 32.5), (42.5, 32.5)],
              [(2.5, 42.5), (12.5, 42.5), (22.5, 42.5), (32.5, 42.5), (42.5, 42.5)]]
         
-        self.locations = [[0, 0], [0, 4], [4, 0], [4, 3]]
+        self.locations = [[0, 0],[4, 0], [0, 4], [4, 3]]
         # self.location_p = [1 for i in range(len(self.locations))]
         
         self.max_x = 5
@@ -72,8 +72,8 @@ class MineExpress(gym.Env):
         self.agent_loc = np.random.randint(0, 5, 2)
         self.package_loc = np.random.randint(0, 5)
         self.package_dest = np.random.randint(0, 5)
-        while self.package_dest != self.package_loc:
-            self.passenger_destination = np.random.randint(0, 5)
+        while self.package_dest == self.package_loc:
+            self.package_dest = np.random.randint(0, 5)
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         self.last_action = None
         
@@ -83,6 +83,7 @@ class MineExpress(gym.Env):
     
     def step(self, action):
         movement_list = self.getObservation()
+        print(movement_list)
         reward = -1
         done = False
         
@@ -93,7 +94,7 @@ class MineExpress(gym.Env):
             self.agent_loc[0] = min(self.agent_loc[0] + 1, self.max_x)
             self.actionHandler(action)
         elif action == 2 and movement_list[2]:
-            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_x)
+            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_z)
             self.actionHandler(action)
         elif action == 3 and movement_list[3]:
             self.agent_loc[1] = max(self.agent_loc[1] - 1, 0)
@@ -105,18 +106,19 @@ class MineExpress(gym.Env):
             else:
                 reward -= 10
         elif action == 5:
-            if self.package_loc == self.locations[self.package_dest] and self.package_loc == 4:
+            if self.agent_loc.tolist() == self.locations[self.package_dest] and self.package_loc == 4:
                 self.package_loc = self.package_dest
                 self.actionHandler(action)
                 done = True
                 reward += 20
-            elif self.agent_loc in self.locations and self.package_loc == 4:
-                self.package_loc = self.locations.index(self.agent_loc)
+            elif self.agent_loc.tolist() in self.locations and self.package_loc == 4:
+                self.package_loc = self.locations.index(self.agent_loc.tolist())
                 self.actionHandler(action)
                 reward -= 10
             else:
                 reward -= 10
         
+        time.sleep(0.3)
         world_state = self.mission.getWorldState()
         if not world_state.is_mission_running:
             done = True
@@ -126,7 +128,7 @@ class MineExpress(gym.Env):
         self.last_action = action
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         
-        return self.state, reward, done, f"{self.last_action}"
+        return self.state, reward, done, f"last action: {self.last_action}"
     
     def actionHandler(self, action):
         useChestProcess = \
@@ -202,15 +204,76 @@ class MineExpress(gym.Env):
         return 4 * (5 * ((5 * agent_loc[0]) + agent_loc[1]) + package_loc) + package_dest
 
 
-# if __name__ == "__main__":
-#     mission = MineExpress(0)
-#     time.sleep(0.1)
-#     print(mission.agent_loc)
-#     mission.step(0)
-#     print(mission.agent_loc)
-#     time.sleep(0.2)
-#     mission.step(1)
-#     print(mission.agent_loc)
-#     time.sleep(0.2)
-#     mission.step(1)
-#     print(mission.agent_loc)
+if __name__ == "__main__":
+    mission = MineExpress(0)
+    
+    time.sleep(1)
+    print(mission.package_loc, mission.package_dest)
+    
+    print(mission.agent_loc)
+    s, r, d, i  = mission.step(0)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(0)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(2)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(2)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(2)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(1)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(1)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(4)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    print(mission.agent_loc)
+    s, r, d, i  = mission.step(0)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(0)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    print(mission.agent_loc)
+    s, r, d, i  = mission.step(3)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(3)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(3)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(1)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(1)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)
+    s, r, d, i  = mission.step(5)
+    print(mission.agent_loc)
+    print(s,r,d,i)
+    time.sleep(0.2)

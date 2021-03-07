@@ -27,7 +27,7 @@
         </AgentStart>
         <AgentHandlers>
             <RewardForTouchingBlockType>
-                <Block type="soul_sand" reward="-3" behaviour="oncePerTimeSpan"/>
+                <Block type="soul_sand" reward="-2" behaviour="oncePerTimeSpan"/>
                 <!--                <Block type="stone" reward="-1" behaviour="oncePerTimeSpan"/>-->
             </RewardForTouchingBlockType>
             <ContinuousMovementCommands/>
