@@ -37,7 +37,9 @@ class MineExpress(gym.Env):
         
     """
     
-    def __init__(self, env_config):
+    def __init__(self, seed = None):
+        if seed is not None:
+            np.random.seed(seed)
         self.mission = MalmoUtils.MalmoInitializer()
         self.absolute_position = \
             [[(2.5, 2.5), (12.5, 2.5), (22.5, 2.5), (32.5, 2.5), (42.5, 2.5)],
@@ -46,7 +48,7 @@ class MineExpress(gym.Env):
              [(2.5, 32.5), (12.5, 32.5), (22.5, 32.5), (32.5, 32.5), (42.5, 32.5)],
              [(2.5, 42.5), (12.5, 42.5), (22.5, 42.5), (32.5, 42.5), (42.5, 42.5)]]
         
-        self.locations = [(0, 0), (0, 4), (4, 0), (4, 3)]
+        self.locations = [[0, 0], [0, 4], [4, 0], [4, 3]]
         # self.location_p = [1 for i in range(len(self.locations))]
         
         self.max_x = 5
@@ -55,13 +57,17 @@ class MineExpress(gym.Env):
         self.state_num = 500
         
         self.action_space = Discrete(self.action_num)
-        self.observation_space = Discrete(self.observation_space)
+        self.observation_space = Discrete(self.state_num)
+        
+        # self.agent_loc = None
+        # self.package_loc = None
+        # self.package_dest = None
+        # self.state = None
+        # self.last_action = None
         
         self.reset()
     
     def reset(self):
-        world_state = self.mission.initMalmo(self.getMission(), "MineExpress")
-        
         # Reset init State
         self.agent_loc = np.random.randint(0, 5, 2)
         self.package_loc = np.random.randint(0, 5)
@@ -69,7 +75,9 @@ class MineExpress(gym.Env):
         while self.package_dest != self.package_loc:
             self.passenger_destination = np.random.randint(0, 5)
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
-        self.lastaction = None
+        self.last_action = None
+        
+        world_state = self.mission.initMalmo(self.getMission(), "MineExpress")
         
         return self.state
     
@@ -91,7 +99,7 @@ class MineExpress(gym.Env):
             self.agent_loc[1] = max(self.agent_loc[1] - 1, 0)
             self.actionHandler(action)
         elif action == 4:
-            if self.package_loc < 4 and self.agent_loc == self.locations[self.package_loc]:
+            if self.package_loc < 4 and self.agent_loc.tolist() == self.locations[self.package_loc]:
                 self.actionHandler(action)
                 self.package_loc = 4
             else:
@@ -115,31 +123,50 @@ class MineExpress(gym.Env):
         for r in world_state.rewards:
             reward += r.getValue()
         
-        self.lastaction = action
+        self.last_action = action
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         
-        return self.state, reward, done, f"{self.lastaction}"
+        return self.state, reward, done, f"{self.last_action}"
     
     def actionHandler(self, action):
+        useChestProcess = \
+            ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 0"]
+        
         if action == 0:
-            self.mission.sendCommand("move 1")
+            self.mission.sendCommand("setYaw 180")
+            time.sleep(0.1)
+            for i in range(0, 10):
+                self.mission.sendCommand("movenorth")
+                time.sleep(0.1)
         if action == 1:
-            self.mission.sendCommand("move 1")
+            self.mission.sendCommand("setYaw 0")
+            time.sleep(0.1)
+            for i in range(0, 10):
+                self.mission.sendCommand("movesouth 1")
+                time.sleep(0.1)
         if action == 2:
-            self.mission.sendCommand("move 1")
+            self.mission.sendCommand("setYaw -90")
+            time.sleep(0.1)
+            for i in range(0, 10):
+                self.mission.sendCommand("moveeast 1")
+                time.sleep(0.1)
         if action == 3:
-            self.mission.sendCommand("move 1")
-        if action == 4:
-            self.mission.sendCommand("move 1")
-        if action == 5:
-            self.mission.sendCommand("move 1")
+            self.mission.sendCommand("setYaw 90")
+            time.sleep(0.1)
+            for i in range(0, 10):
+                self.mission.sendCommand("movewest 1")
+                time.sleep(0.1)
+        if action in {4, 5}:
+            for cmd in useChestProcess:
+                self.mission.sendCommand(cmd)
+                time.sleep(0.1)
     
     def getMission(self):
         start_pos = self.absolute_position[self.agent_loc[0]][self.agent_loc[1]]
         
         mission = MalmoUtils.MissionHandler("mission.xml")
         mission.set("FileWorldGenerator", src=f"{os.getcwd()}\\MineExpressWorld")
-        mission.insert("DrawingDecorator", "DrawBlock", x=f"{self.package_loc}", y="2", z="-10")
+        mission.insert("DrawingDecorator", "DrawBlock", type="redstone_block", x=f"{self.package_loc}", y="2", z="-10")
         mission.insert("AgentStart", "Placement", x=f"{start_pos[0]}", y=f"{2}", z=f"{start_pos[1]}", pitch="0",
                        yaw="180")
         return str(mission)
@@ -156,7 +183,12 @@ class MineExpress(gym.Env):
                 
                 # Get observation
                 grid = observations['floor']
-                grid = np.array(grid).reshape(7, 7)
+                grid = np.array(grid).reshape((2, 7, 7))
+                
+                if all([x in {"bedrock", "air"} for x in grid[0].flatten()]):
+                    grid = grid[1]
+                else:
+                    grid = grid[0]
                 
                 path_list = {"stone", "soul_sand"}
                 north = True if grid[0][3] in path_list else False
@@ -170,4 +202,15 @@ class MineExpress(gym.Env):
         return 4 * (5 * ((5 * agent_loc[0]) + agent_loc[1]) + package_loc) + package_dest
 
 
-if __name__ == "__main__": ...
+# if __name__ == "__main__":
+#     mission = MineExpress(0)
+#     time.sleep(0.1)
+#     print(mission.agent_loc)
+#     mission.step(0)
+#     print(mission.agent_loc)
+#     time.sleep(0.2)
+#     mission.step(1)
+#     print(mission.agent_loc)
+#     time.sleep(0.2)
+#     mission.step(1)
+#     print(mission.agent_loc)

@@ -30,12 +30,15 @@
                 <Block type="soul_sand" reward="-3" behaviour="oncePerTimeSpan"/>
                 <!--                <Block type="stone" reward="-1" behaviour="oncePerTimeSpan"/>-->
             </RewardForTouchingBlockType>
+            <ContinuousMovementCommands/>
             <DiscreteMovementCommands/>
+            <AbsoluteMovementCommands/>
+            <InventoryCommands/>
             <ObservationFromFullStats/>
             <ObservationFromGrid>
                 <Grid name="floor">
                     <min x="-3" y="-1" z="-3"/>
-                    <max x="3" y="-1" z="3"/>
+                    <max x="3" y="0" z="3"/>
                 </Grid>
             </ObservationFromGrid>
             <AgentQuitFromTimeUp timeLimitMs="100000"/>

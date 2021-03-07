@@ -48,7 +48,7 @@ class MalmoInitializer:
         except RuntimeError as e:
             print('ERROR:', e)
             print(self.agentHost.getUsage())
-            exit(1)
+            sys.exit(1)
     
     def initMalmo(self, missionXML, missionName):
         
@@ -68,7 +68,7 @@ class MalmoInitializer:
             except RuntimeError as e:
                 if retry == max_retries - 1:
                     print("Error starting mission:", e)
-                    exit(1)
+                    sys.exit(1)
                 else:
                     time.sleep(2)
         
