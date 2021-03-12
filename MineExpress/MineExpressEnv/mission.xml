@@ -23,7 +23,7 @@
     <AgentSection mode="Survival">
         <Name>Courier HeroBrine</Name>
         <AgentStart>
-            <!-- Set agent init location -->
+            <Inventory/>
         </AgentStart>
         <AgentHandlers>
             <RewardForTouchingBlockType>
@@ -41,7 +41,11 @@
                     <max x="3" y="0" z="3"/>
                 </Grid>
             </ObservationFromGrid>
-            <AgentQuitFromTimeUp timeLimitMs="100000"/>
+            <MissionQuitCommands>
+                <ModifierList type="allow-list">
+                    <command>quit</command>
+                </ModifierList>
+            </MissionQuitCommands>
         </AgentHandlers>
     </AgentSection>
 </Mission>

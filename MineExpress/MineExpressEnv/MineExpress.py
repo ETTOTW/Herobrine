@@ -2,13 +2,7 @@ import gym, ray, torch
 import math, time, MalmoUtils
 import numpy as np
 import json
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from scipy.spatial import distance
-from gym.spaces import Discrete, Box
-from ray.rllib.agents import ppo
-from collections import defaultdict
-from gym.envs.toy_text import discrete
+from gym.spaces import Discrete
 import os
 
 
@@ -49,7 +43,6 @@ class MineExpress(gym.Env):
              [(2.5, 42.5), (12.5, 42.5), (22.5, 42.5), (32.5, 42.5), (42.5, 42.5)]]
         
         self.locations = [[0, 0],[4, 0], [0, 4], [4, 3]]
-        # self.location_p = [1 for i in range(len(self.locations))]
         
         self.max_x = 5
         self.max_z = 5
@@ -59,31 +52,32 @@ class MineExpress(gym.Env):
         self.action_space = Discrete(self.action_num)
         self.observation_space = Discrete(self.state_num)
         
-        # self.agent_loc = None
-        # self.package_loc = None
-        # self.package_dest = None
-        # self.state = None
-        # self.last_action = None
-        
-        self.reset()
+        # self.reset()
     
     def reset(self):
         # Reset init State
         self.agent_loc = np.random.randint(0, 5, 2)
-        self.package_loc = np.random.randint(0, 5)
-        self.package_dest = np.random.randint(0, 5)
+        self.package_loc = np.random.randint(0, len(self.locations))
+        self.package_dest = np.random.randint(0, len(self.locations))
         while self.package_dest == self.package_loc:
-            self.package_dest = np.random.randint(0, 5)
+            self.package_dest = np.random.randint(0, len(self.locations))
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         self.last_action = None
+
+        world_state = self.mission.getWorldState()
+        if world_state.is_mission_running:
+            self.mission.sendCommand("quit")
+            time.sleep(0.1)
         
-        world_state = self.mission.initMalmo(self.getMission(), "MineExpress")
+        self.mission.initMalmo(self.getMission(), "MineExpress")
+        
+        time.sleep(0.5)
         
         return self.state
     
     def step(self, action):
         movement_list = self.getObservation()
-        print(movement_list)
+        # print(movement_list)
         reward = -1
         done = False
         
@@ -128,6 +122,8 @@ class MineExpress(gym.Env):
         self.last_action = action
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         
+        time.sleep(0.5)
+        
         return self.state, reward, done, f"last action: {self.last_action}"
     
     def actionHandler(self, action):
@@ -140,25 +136,25 @@ class MineExpress(gym.Env):
             for i in range(0, 10):
                 self.mission.sendCommand("movenorth")
                 time.sleep(0.1)
-        if action == 1:
+        elif action == 1:
             self.mission.sendCommand("setYaw 0")
             time.sleep(0.1)
             for i in range(0, 10):
                 self.mission.sendCommand("movesouth 1")
                 time.sleep(0.1)
-        if action == 2:
+        elif action == 2:
             self.mission.sendCommand("setYaw -90")
             time.sleep(0.1)
             for i in range(0, 10):
                 self.mission.sendCommand("moveeast 1")
                 time.sleep(0.1)
-        if action == 3:
+        elif action == 3:
             self.mission.sendCommand("setYaw 90")
             time.sleep(0.1)
             for i in range(0, 10):
                 self.mission.sendCommand("movewest 1")
                 time.sleep(0.1)
-        if action in {4, 5}:
+        elif action in {4, 5}:
             for cmd in useChestProcess:
                 self.mission.sendCommand(cmd)
                 time.sleep(0.1)
@@ -204,7 +200,7 @@ class MineExpress(gym.Env):
         return 4 * (5 * ((5 * agent_loc[0]) + agent_loc[1]) + package_loc) + package_dest
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     mission = MineExpress(0)
 #
 #     time.sleep(1)
@@ -277,3 +273,12 @@ class MineExpress(gym.Env):
 #     print(mission.agent_loc)
 #     print(s,r,d,i)
 #     time.sleep(0.2)
+
+    mission = MineExpress(0)
+    mission.reset()
+    print(1)
+    mission.step(0)
+
+    mission.reset()
+    mission.step(0)
+    print(2)
