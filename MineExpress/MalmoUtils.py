@@ -59,7 +59,7 @@ class MalmoInitializer:
         
         max_retries = 3
         my_clients = MalmoPython.ClientPool()
-        my_clients.add(MalmoPython.ClientInfo('127.0.0.1', 10235))  # add Minecraft machines here as available
+        my_clients.add(MalmoPython.ClientInfo('127.0.0.1', 10000))  # add Minecraft machines here as available
         
         for retry in range(max_retries):
             try:
