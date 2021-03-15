@@ -3,10 +3,13 @@
     <About>
         <Summary>Mine Express</Summary>
     </About>
+    <ModSettings>
+        <PrioritiseOffscreenRendering>true</PrioritiseOffscreenRendering>
+    </ModSettings>
     <ServerSection>
         <ServerInitialConditions>
             <Time>
-                <StartTime>12000</StartTime>
+                <StartTime>3000</StartTime>
                 <AllowPassageOfTime>false</AllowPassageOfTime>
             </Time>
             <AllowSpawning>false</AllowSpawning>
@@ -26,10 +29,6 @@
             <Inventory/>
         </AgentStart>
         <AgentHandlers>
-            <RewardForTouchingBlockType>
-                <Block type="soul_sand" reward="-2" behaviour="oncePerTimeSpan"/>
-                <!--                <Block type="stone" reward="-1" behaviour="oncePerTimeSpan"/>-->
-            </RewardForTouchingBlockType>
             <ContinuousMovementCommands/>
             <DiscreteMovementCommands/>
             <AbsoluteMovementCommands/>

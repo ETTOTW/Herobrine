@@ -31,7 +31,7 @@ class MineExpress(gym.Env):
         
     """
     
-    def __init__(self, seed = None):
+    def __init__(self, seed=None):
         if seed is not None:
             np.random.seed(seed)
         self.mission = MalmoUtils.MalmoInitializer()
@@ -42,7 +42,7 @@ class MineExpress(gym.Env):
              [(2.5, 32.5), (12.5, 32.5), (22.5, 32.5), (32.5, 32.5), (42.5, 32.5)],
              [(2.5, 42.5), (12.5, 42.5), (22.5, 42.5), (32.5, 42.5), (42.5, 42.5)]]
         
-        self.locations = [[0, 0],[4, 0], [0, 4], [4, 3]]
+        self.locations = [[0, 0], [4, 0], [0, 4], [4, 3]]
         
         self.max_x = 5
         self.max_z = 5
@@ -63,32 +63,34 @@ class MineExpress(gym.Env):
             self.package_dest = np.random.randint(0, len(self.locations))
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         self.last_action = None
-
+        
         world_state = self.mission.getWorldState()
         if world_state.is_mission_running:
-            self.mission.sendCommand("quit")
             time.sleep(0.1)
+            self.mission.sendCommand("quit")
         
         self.mission.initMalmo(self.getMission(), "MineExpress")
         
-        time.sleep(0.5)
+        # time.sleep(0.5)
         
         return self.state
     
-    def step(self, action):
-        movement_list = self.getObservation()
-        # print(movement_list)
-        reward = -1
+    def step(self, action: int):
+        movement_list, cost_list = self.getObservation()
+
+        reward = 0
+        if action < 4:
+            reward = cost_list[action]
         done = False
         
         if action == 0 and movement_list[0]:
             self.agent_loc[0] = max(self.agent_loc[0] - 1, 0)
             self.actionHandler(action)
         elif action == 1 and movement_list[1]:
-            self.agent_loc[0] = min(self.agent_loc[0] + 1, self.max_x)
+            self.agent_loc[0] = min(self.agent_loc[0] + 1, self.max_x-1)
             self.actionHandler(action)
         elif action == 2 and movement_list[2]:
-            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_z)
+            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_z-1)
             self.actionHandler(action)
         elif action == 3 and movement_list[3]:
             self.agent_loc[1] = max(self.agent_loc[1] - 1, 0)
@@ -97,67 +99,81 @@ class MineExpress(gym.Env):
             if self.package_loc < 4 and self.agent_loc.tolist() == self.locations[self.package_loc]:
                 self.actionHandler(action)
                 self.package_loc = 4
+                # reward = 5
             else:
-                reward -= 10
+                reward = -10
         elif action == 5:
             if self.agent_loc.tolist() == self.locations[self.package_dest] and self.package_loc == 4:
                 self.package_loc = self.package_dest
                 self.actionHandler(action)
                 done = True
-                reward += 20
-            elif self.agent_loc.tolist() in self.locations and self.package_loc == 4:
-                self.package_loc = self.locations.index(self.agent_loc.tolist())
-                self.actionHandler(action)
-                reward -= 10
+                reward = 20
+            # elif self.agent_loc.tolist() in self.locations and self.package_loc == 4:
+            #     self.package_loc = self.locations.index(self.agent_loc.tolist())
+            #     # self.actionHandler(action)
+            #     reward = -10
             else:
-                reward -= 10
+                reward = -10
         
-        time.sleep(0.3)
-        world_state = self.mission.getWorldState()
-        if not world_state.is_mission_running:
-            done = True
-        for r in world_state.rewards:
-            reward += r.getValue()
+        # time.sleep(0.3)
+        # world_state = self.mission.getWorldState()
+        # if not world_state.is_mission_running:
+        #     done = True
+        # for r in world_state.rewards:
+        #     reward += r.getValue()
         
         self.last_action = action
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
-        
-        time.sleep(0.5)
         
         return self.state, reward, done, f"last action: {self.last_action}"
     
     def actionHandler(self, action):
         useChestProcess = \
-            ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 0"]
+            ["use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2"]
         
-        if action == 0:
-            self.mission.sendCommand("setYaw 180")
-            time.sleep(0.1)
-            for i in range(0, 10):
-                self.mission.sendCommand("movenorth")
-                time.sleep(0.1)
-        elif action == 1:
-            self.mission.sendCommand("setYaw 0")
-            time.sleep(0.1)
-            for i in range(0, 10):
-                self.mission.sendCommand("movesouth 1")
-                time.sleep(0.1)
-        elif action == 2:
-            self.mission.sendCommand("setYaw -90")
-            time.sleep(0.1)
-            for i in range(0, 10):
-                self.mission.sendCommand("moveeast 1")
-                time.sleep(0.1)
-        elif action == 3:
-            self.mission.sendCommand("setYaw 90")
-            time.sleep(0.1)
-            for i in range(0, 10):
-                self.mission.sendCommand("movewest 1")
-                time.sleep(0.1)
+        if action in {0, 1, 2, 3}:
+            x, y = self.agent_loc
+            x, y = self.absolute_position[x][y]
+            self.mission.sendCommand(f"tp {x} 2 {y}")
+            # time.sleep(0.1)
+        
         elif action in {4, 5}:
             for cmd in useChestProcess:
                 self.mission.sendCommand(cmd)
-                time.sleep(0.1)
+                # time.sleep(0.1)
+    
+    # def actionHandler(self, action):
+    #     useChestProcess = \
+    #         ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 0"]
+    #
+    #     if action == 0:
+    #         self.mission.sendCommand("setYaw 180")
+    #         time.sleep(0.1)
+    #         for i in range(0, 10):
+    #             self.mission.sendCommand("movenorth")
+    #             time.sleep(0.1)
+    #     elif action == 1:
+    #         self.mission.sendCommand("setYaw 0")
+    #         time.sleep(0.1)
+    #         for i in range(0, 10):
+    #             self.mission.sendCommand("movesouth 1")
+    #             time.sleep(0.1)
+    #     elif action == 2:
+    #         self.mission.sendCommand("setYaw -90")
+    #         time.sleep(0.1)
+    #         for i in range(0, 10):
+    #             self.mission.sendCommand("moveeast 1")
+    #             time.sleep(0.1)
+    #     elif action == 3:
+    #         self.mission.sendCommand("setYaw 90")
+    #         time.sleep(0.1)
+    #         for i in range(0, 10):
+    #             self.mission.sendCommand("movewest 1")
+    #             time.sleep(0.1)
+    #     elif action in {4, 5}:
+    #         for cmd in useChestProcess:
+    #             self.mission.sendCommand(cmd)
+    #             time.sleep(0.1)
     
     def getMission(self):
         start_pos = self.absolute_position[self.agent_loc[0]][self.agent_loc[1]]
@@ -165,13 +181,14 @@ class MineExpress(gym.Env):
         mission = MalmoUtils.MissionHandler("mission.xml")
         mission.set("FileWorldGenerator", src=f"{os.getcwd()}\\MineExpressWorld")
         mission.insert("DrawingDecorator", "DrawBlock", type="redstone_block", x=f"{self.package_loc}", y="2", z="-10")
-        mission.insert("AgentStart", "Placement", x=f"{start_pos[0]}", y=f"{2}", z=f"{start_pos[1]}", pitch="0",
+        mission.insert("AgentStart", "Placement", x=f"{start_pos[0]}", y=f"{2}", z=f"{start_pos[1]}", pitch="90",
                        yaw="180")
         return str(mission)
     
     def getObservation(self):
         world_state = self.mission.getWorldState()
         while world_state.is_mission_running:
+            time.sleep(0.1)
             if len(world_state.errors) > 0:
                 raise AssertionError('Could not load grid.')
             if world_state.number_of_observations_since_last_state > 0:
@@ -188,97 +205,25 @@ class MineExpress(gym.Env):
                 else:
                     grid = grid[0]
                 
-                path_list = {"stone", "soul_sand"}
-                north = True if grid[0][3] in path_list else False
-                south = True if grid[6][3] in path_list else False
-                east = True if grid[3][6] in path_list else False
-                west = True if grid[3][0] in path_list else False
-                return (north, south, east, west)
+                # path_list = {"stone", "soul_sand"}
+                # north = True if grid[0][3] in path_list else False
+                # south = True if grid[6][3] in path_list else False
+                # east = True if grid[3][6] in path_list else False
+                # west = True if grid[3][0] in path_list else False
+                
+                obs = [grid[0][3], grid[6][3], grid[3][6], grid[3][0]]
+                
+                movement = [x in {"stone", "soul_sand"} for x in obs]
+                cost = [-1 if x == "stone" else -4 for x in obs]
+                
+                # return (north, south, east, west)
+                return movement, cost
+            world_state = self.mission.getWorldState()
         raise
     
     def getStateNumber(self, agent_loc, package_loc, package_dest):
         return 4 * (5 * ((5 * agent_loc[0]) + agent_loc[1]) + package_loc) + package_dest
-
-
-if __name__ == "__main__":
-#     mission = MineExpress(0)
-#
-#     time.sleep(1)
-#     print(mission.package_loc, mission.package_dest)
-#
-#     print(mission.agent_loc)
-#     s, r, d, i  = mission.step(0)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(0)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(2)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(2)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(2)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(1)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(1)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(4)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     print(mission.agent_loc)
-#     s, r, d, i  = mission.step(0)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(0)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     print(mission.agent_loc)
-#     s, r, d, i  = mission.step(3)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(3)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(3)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(1)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(1)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-#     s, r, d, i  = mission.step(5)
-#     print(mission.agent_loc)
-#     print(s,r,d,i)
-#     time.sleep(0.2)
-
-    mission = MineExpress(0)
-    mission.reset()
-    print(1)
-    mission.step(0)
-
-    mission.reset()
-    mission.step(0)
-    print(2)
+    
+    def getAbsolutePosition(self):
+        x, y = self.agent_loc
+        return self.absolute_position[x][y]
