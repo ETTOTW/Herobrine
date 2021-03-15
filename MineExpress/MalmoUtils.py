@@ -90,4 +90,4 @@ class MalmoInitializer:
     def sendCommand(self, command: str, times=1):
         for i in range(0, times):
             self.agentHost.sendCommand(command)
-            time.sleep(0.1)
+            time.sleep(0.2)
