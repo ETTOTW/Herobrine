@@ -57,7 +57,7 @@ def create_mission(ind,agent_host):
         world_state = agent_host.peekWorldState()
         for error in world_state.errors:
             print("Error:",error.text)
-
+    time.sleep(1)
     return my_mission
 
 def GetMissionXML(size=2):
@@ -120,7 +120,7 @@ def GetMissionXML(size=2):
                     </ObservationFromGrid>
                     <RewardForTouchingBlockType>
                         <Block type = "grass" reward="-1" behaviour="oncePerTimeSpan"/>
-                        <Block type = "soul_sand" reward="-1.5" behaviour="oncePerTimeSpan"/>
+                        <Block type = "soul_sand" reward="-1" behaviour="oncePerTimeSpan"/>
                         <Block type = "stone" reward="-1" behaviour="oncePerTimeSpan"/>
                         <Block type = "diamond_block" reward="-1" behaviour="oncePerTimeSpan"/>
                         <Block type = "emerald_block" reward="-1" behaviour="oncePerTimeSpan"/>
@@ -144,15 +144,18 @@ def GetMissionXML(size=2):
  
     
 class MineExpressBaseline():
-    def __init__(self, itemPosId=0, destPosId=1, legalPos=4):  
+    def __init__(self, itemPosId=0, destPosId=1, legalPos=4, training=True):  
         self.legalPos = legalPos
         self.itemPosId = itemPosId
         self.destPosId = destPosId
         assert(itemPosId<legalPos-1 and destPosId<(legalPos-1) and itemPosId!=destPosId)
         
-        self.epsilon = 0.01
-        self.alpha = 0.8
-        self.gamma = 1.0
+        self.max_epsilon = 0.9
+        self.min_epsilon = 0.1
+        self.decay = 0.01
+        self.epsilon = self.max_epsilon
+        self.alpha = 0.1
+        self.gamma = 0.6
         self.q_table = {} 
         
         # in the format "{x}:{z}:{packageInd}:{dropOffInd}"
@@ -177,9 +180,10 @@ class MineExpressBaseline():
             "dropoff": 'diamond_block'
         }
         self.debug = True 
-        self.training = True
+        self.training = training
+        if self.training == False:
+            self.epsilon = 0
         self.nCommand = 0 # number of actions executed so far
-        
         
     def start_new_mission(self,itemPosId):
         self.itemPosId = itemPosId
@@ -188,20 +192,25 @@ class MineExpressBaseline():
         self.nCommand = 0
         
     def write_to_csv(self):
-        w = csv.writer(open("output.csv","w"))
+        w = csv.writer(open("q_table.csv","w"))
         for key,val in self.q_table.items():
             w.writerow([key]+val)
         #w.close()
     
-    def read_from_csv(self):
+    def read_from_csv(self, file = "q_table.csv"):
         self.q_table = dict()
-        with open("output.csv") as ifile:
+        with open(file) as ifile:
             csv_reader = csv.reader(ifile)
             for row in csv_reader:
                 if len(row)!=0:
                     self.q_table[row[0]] = [float(i) for i in row[1:]]
     
-    
+    def print_q_table(self):
+        print("**q_table**")
+        for state,action in self.q_table.items():
+            print("state: ", state, " ", action)
+        print()    
+            
     def get_pos(self, world_state):
         '''
         return 
@@ -236,6 +245,8 @@ class MineExpressBaseline():
             self.q_table[state] = ([0]*len(self.actions))
         return state
         
+    def update_e(self):
+        self.epsilon = self.epsilon-self.decay if (self.epsilon > self.min_epsilon) else self.epsilon
         
     def update_q_table(self, curr_r, curr_s):
         if self.training and self.prev_s is not None and self.prev_a is not None:
@@ -300,12 +311,13 @@ class MineExpressBaseline():
             if curr_block == self.block_dict["dropoff"] and self.itemPosId == -1:
                 agent_host.sendCommand("chat " + "legal drop off")
                 agent_host.sendCommand("swapInventoryItems 0 9")
+                time.sleep(0.2) # current mission end, avoid losing final reward
                 agent_host.sendCommand("jump 1")
             else:
                 agent_host.sendCommand("chat " + "cannot drop off here")
         else:
             agent_host.sendCommand(self.actions[action])
-        #time.sleep(2)
+        time.sleep(0.2)
         
         self.prev_s = curr_s
         self.prev_a = action
@@ -313,21 +325,28 @@ class MineExpressBaseline():
         
     def checkAction(self,world_state,agent_host,prev_x,prev_z):
         res = 1
+        print("**checkAction**")
         while world_state.is_mission_running:
             world_state = agent_host.peekWorldState()
             curr_x, curr_z, curr_block = self.get_pos(world_state)
             if self.prev_a == 4 or self.prev_a == 5:
+                print("action:", self.prev_a, "; pre x and z:", prev_x, prev_z, "; curr x and z:", curr_x, curr_z)
                 return 
             elif self.prev_a == 0 and prev_z+1 == curr_z and prev_x == curr_x:
+                print("action:", self.prev_a, "; pre x and z:", prev_x, prev_z, "; curr x and z:", curr_x, curr_z)
                 return
             elif self.prev_a == 1 and prev_z-1 == curr_z and prev_x == curr_x:
+                print("action:", self.prev_a, "; pre x and z:", prev_x, prev_z, "; curr x and z:", curr_x, curr_z)
                 return  
             elif self.prev_a == 2 and prev_z == curr_z and prev_x+1 == curr_x:
+                print("action:", self.prev_a, "; pre x and z:", prev_x, prev_z, "; curr x and z:", curr_x, curr_z)
                 return
             elif self.prev_a == 3 and prev_z == curr_z and prev_x-1 == curr_x:
+                print("action:", self.prev_a, "; pre x and z:", prev_x, prev_z, "; curr x and z:", curr_x, curr_z)
                 return
             res+=1
             if res >= 100000:
+                print("action cannot be executed")
                 agent_host.sendCommand("jump 1")
                 agent_host.sendCommand("jump 1")
     
@@ -353,7 +372,7 @@ class MineExpressBaseline():
             world_state = agent_host.peekWorldState()
             while world_state.is_mission_running and all(e.text=='{}' for e in world_state.observations):
                 world_state = agent_host.peekWorldState()
-            res = 1
+            '''
             while world_state.is_mission_running and sum(r.getValue() for r in world_state.rewards) == 0:
                 world_state = agent_host.peekWorldState()
                 res+=1
@@ -361,11 +380,13 @@ class MineExpressBaseline():
                     print("error finding rewards")
                     agent_host.sendCommand("jump 1")
                     agent_host.sendCommand("jump 1")
-            self.checkAction(world_state,agent_host, prev_x, prev_z)
-            
+            '''
+            self.checkAction(world_state, agent_host, prev_x, prev_z)
             world_state = agent_host.getWorldState()
             for err in world_state.errors:
                 print(err)
+            
+            print('epsilon:',self.epsilon)
             curr_x, curr_z, curr_block = self.get_pos(world_state)
             curr_r = sum(r.getValue() for r in world_state.rewards)
             if self.debug:
@@ -373,6 +394,11 @@ class MineExpressBaseline():
                 print("reward= ",curr_r)
             prev_x = curr_x
             prev_z = curr_z
+            self.print_q_table()
+            if not world_state.is_mission_running:
+                break
+            #input("press to continue:")
+            agent.update_e()
             total_reward += self.act(world_state, agent_host, curr_r)
             if self.nCommand == 3:
                 self.write_to_csv()
@@ -386,6 +412,7 @@ class MineExpressBaseline():
 
 # Create default Malmo objects:
 agent_host = create_malmo_obj()
+agent_host.setRewardsPolicy(MalmoPython.RewardsPolicy.LATEST_REWARD_ONLY)
 num_repeats = 10000
 cumulative_rewards = []
 reward=0
@@ -396,7 +423,8 @@ destPosId=1
 legalPos=4
 
 agent = MineExpressBaseline(itemPosId, destPosId, legalPos)
-#agent.read_from_csv()
+# agent.read_from_csv("5x5map_after 142mission_trained.csv")
+
 # constant pickup and dropoff position for now
 for i in range(num_repeats):
     my_mission = create_mission(i,agent_host)
