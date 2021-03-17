@@ -78,24 +78,24 @@ We use Dijkstra's algorithm as the upper bound for the q-learning algorithm beca
 To find the optimal a path from a start point to destination, we use Dijkstra's algorithm in following steps:
 
     (1. Initialize two priority dictionaries and save the start point)
-    grid_dist: key = block index; value = the cost from the start to the key
-    pre_dist: key = block index; value = neighbor block index that constitutes the current optimal path from start to the key.
+    grid_dist[ {key=block index}: {value=cost from the start to the key} ]
+    pre_dist [ {key=block index}: {value=neighbor block index that constitutes the current optimal path from start to the key} ]
     grid_dist[source] = 0
     pre_dist[source] = -1
 
     (2. Add path to pre_dist)
     While grid_dist is not empty:
-	Choose a key k with the smallest value from grid_dist and search all its neighbor blocks. 
-	If any of the k’s neighbor blocks is valid:
-		Determines the cost from start to the block (start to k + k to block).
-		If the block index in not in grid_dist or cost < old value, updates grid_dist[block_index] = cost. Updates pre_dist[block_index] = k.  
-	        Delete k from grid_dist
+    	Choose a key k with the smallest value from grid_dist and search all its neighbor blocks. 
+    	If any of the k’s neighbor blocks is valid:
+    		Determines the cost from start to the block (start to k + k to block).
+    		If the block index in not in grid_dist or cost < old value, updates grid_dist[block_index] = cost. Updates pre_dist[block_index] = k.  
+    		Delete k from grid_dist
 		    
     (3. Extract the path from pre_dist)
     curr = destination
     while pre_dist[curr] != -1:
     	Adds curr to the beginning of optimal_path_list
-	curr = pre_grids[curr]
+    	curr = pre_grids[curr]
     Adds the start point to the beginning of optimal_path_list
 
 <p align="center">
@@ -106,16 +106,16 @@ For example, we want to find an optimal path from block 1 to block 4 showing abo
 
     Before Iteration: 
     	grid_dist[ 1:0 ]
-	pre_dist[ 1:-1 ]
+    	pre_dist[ 1:-1 ]
     Iteration 1:
-	grid_dist[ 2:1, 4:4 ]
-	pre_dist[ 1:-1, 2:1, 4:1 ]
+    	grid_dist[ 2:1, 4:4 ]
+    	pre_dist[ 1:-1, 2:1, 4:1 ]
     Iteration 2:
-	grid_dist[ 3:2, 4:4 ]
-	pre_dist[ 1:-1, 2:1, 4:1, 3:2 ]
+    	grid_dist[ 3:2, 4:4 ]
+    	pre_dist[ 1:-1, 2:1, 4:1, 3:2 ]
     Iteration 3:
-	grid_dist[ 4:3 ]
-	pre_dist[ 1:-1, 2:1, 4:3, 3:2 ]
+    	grid_dist[ 4:3 ]
+    	pre_dist[ 1:-1, 2:1, 4:3, 3:2 ]
 	
 The pre_dist provides us the optimal_path_list = [1, 2, 3, 4]. 
 
