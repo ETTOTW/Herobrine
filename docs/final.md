@@ -87,18 +87,18 @@ To find the optimal a path from a start point to destination, we use Dijkstra's 
     While grid_dist is not empty:
     	Choose a key k with the smallest value from grid_dist
     	If any of the k’s neighbor blocks is valid:
-    		Determines the cost from start to the block (start to k + k to block)
-    		If the block index in not in grid_dist or cost < old value:
-    			Updates grid_dist[block_index] = cost
-    			Updates pre_dist[block_index] = k 
-    		Deletes k from grid_dist
+    		Determine the cost from start to the block (start to k + k to block)
+    		If block index not in grid_dist or cost < old value:
+    			Update grid_dist[block_index] = cost
+    			Update pre_dist[block_index] = k 
+    		Delete k from grid_dist
 		    
     (3. Extract the path from pre_dist)
     curr = destination
     while pre_dist[curr] != -1:
-    	Adds curr to the beginning of optimal_path_list
+    	Add curr to the beginning of optimal_path_list
     	curr = pre_grids[curr]
-    Adds the start point to the beginning of optimal_path_list
+    Add the start point to the beginning of optimal_path_list
 
 <p align="center">
   <img src="image/dijsktra_example.jpg" width="500">
@@ -118,7 +118,11 @@ For example, we want to find an optimal path from block 1 to block 4 showing abo
     Iteration 3:
     	grid_dist[ 4:3 ]
     	pre_dist[ 1:-1, 2:1, 4:3, 3:2 ]
-	
+    Iteration 4:
+    	grid_dist[]
+    	pre_dist[ 1:-1, 2:1, 4:3, 3:2 ]
+    End
+    
 The pre_dist provides us the optimal_path_list = [1, 2, 3, 4]. 
 
 Once we get the path_list, we can navigate our agent to finish the mission.
