@@ -34,7 +34,7 @@ Block Types summary:
     - Common Speed: Stone
     - Speed Down: Soul Sand
     
-####Motivation:
+###Motivation:
 
 During the period of the covid virus, many people stayed at home to ensure their safety. At this time, food and express delivery often face the problem of insufficient manpower. An AI that can adapt to any environment and perform such work can greatly facilitate people's lives. We hope to develop such AI. It should not pick up or drop off the package at the wrong place. It should also choose the right path that minimizes the total delivery time. Using AI/ML algorithms is essential because it allows our agent to learn from the environment. Our agent can thus adapt to any new environment. In many real situations, the environment will not be known to the agent, for example, a pizza delivery AI wants to deliver the food to a new neighborhood. AI/ML algorithms allow the AI to learn human intervention.
 
