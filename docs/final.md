@@ -16,7 +16,7 @@ MineExpress is an Artificial Intelligence project developed for routing or deliv
 
 This project took inspiration from taxi-v3 from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions and finds the optimal path.
 
-#### Environment Settings:
+#### **Environment Settings:**
 
 <p align="center">
   <img src="image/map_intro.jpg" width="500">
@@ -42,7 +42,7 @@ During the period of the covid virus, many people stayed at home to ensure their
 ## Approaches
 We will introduce how the random action, Dijkstra's algorithm, and the q-learning algorithm are used in this project below.
 
-#### Setting For All Approches
+#### Setting For All Approaches
 
 **Actions:**
 
