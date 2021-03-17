@@ -25,7 +25,7 @@ This project took inspiration from taxi-v3 from Gym (OpenAI) by stimulating the 
 Figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. These state either has a green block or chest (brown block) in the center. It also have 4 possible locations that are valid for pickup or drop-off. These locations has a chest in the center. At the beginning of each mission, one of the four states that have a chest will be assigned as the package location for pickup, and one of the remaining three states will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
 There are two types of the path. It simulates the real-world environment with different moving speeds for routes. The stone blocks are the path with normal speed. The soul sand block, however, slows down the speed of our agent.
 
-Our agent will start randomly at the top of a state. It is not allowed to walk into the grass block. It can only move a step at a time, pick up the package, or drop off the package.
+Our agent will start randomly at a state. 
 
 Block Types summary:
 
