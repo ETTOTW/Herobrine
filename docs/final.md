@@ -11,7 +11,7 @@ title:  Final
 MineExpress is an Artificial Intelligence project developed for routing or delivery tasks, like amazon shipping, Uber, or UberEat. Our goal is to train our agent to pick up and drop off packages or food to the right places. At the same time, we aim to find an optimal path to navigate our agent to those places. To achieve this, we utilized three methods: q-learning algorithm, Dijkstra's algorithm, and random action. Q-learning is our main algorithm. It utilized an agent-environment loop shown below. Within each process, the agent chooses an action, and the environment returns an observation and rewards. We will visualize this process of learning in the game Minecraft and Malmo platform.
 
 <p align="center">
-  <img src="AI_process.png" width="500">
+  <img src="image/AI_process.png" width="500">
 </p>
 
 This project took inspiration from taxi-v3 from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions and finds the optimal path.
@@ -39,8 +39,6 @@ Block Types summary:
 During the period of the covid virus, many people stayed at home to ensure their safety. At this time, food and express delivery often face the problem of insufficient manpower. An AI that can adapt to any environment and perform such work can greatly facilitate people's lives. We hope to develop such AI. It should not pick up or drop off the package at the wrong place. It should also choose the right path that minimizes the total delivery time. Using AI/ML algorithms is essential because it allows our agent to learn from the environment. Our agent can thus adapt to any new environment. In many real situations, the environment will not be known to the agent, for example, a pizza delivery AI wants to deliver the food to a new neighborhood. AI/ML algorithms allow the AI to learn human intervention.
 
 
-
-
 ## Approaches
 We will introduce how the random action, Dijkstra's algorithm, and the q-learning algorithm are used in this project below.
 
@@ -57,7 +55,7 @@ We use discrete movement commands to train our agents because using continuous m
     4: picup
     5: drop-off
 
-Reward setting:
+Rewards:
 
     - Pass the soul sand path (that slows down the agent’s speed): -4
     - Pass the stone path (with normal speed): -1
@@ -79,29 +77,29 @@ We use Dijkstra's algorithm as the upper bound for the q-learning algorithm beca
 
 To find the optimal a path from a start point to destination, we use Dijkstra's algorithm in following steps:
 
-1. Initialize two priority dictionaries and save the start point.
+    1. Initialize two priority dictionaries and save the start point.
 
-    grid_dist: key = block index; value = the cost from the start to the key
-    pre_dist: key = block index; value = neighbor block index that constitutes the current optimal path from start to the key.
-    grid_dist[source] = 0
-    pre_dist[source] = -1
+	grid_dist: key = block index; value = the cost from the start to the key
+	pre_dist: key = block index; value = neighbor block index that constitutes the current optimal path from start to the key.
+	grid_dist[source] = 0
+	pre_dist[source] = -1
 
-2. Add path to pre_dist:
+    2. Add path to pre_dist:
 
-    While grid_dist is not empty:
-    	Choose a key k with the smallest value from grid_dist and search all its neighbor blocks. 
-    	If any of the k’s neighbor blocks is valid:
-	    Determines the cost from start to the block (start to k + k to block).
-	    If the block index in not in grid_dist or cost < old value, updates grid_dist[block_index] = cost. Updates pre_dist[block_index] = k.  
-	    Delete k from grid_dist
+    	While grid_dist is not empty:
+	    Choose a key k with the smallest value from grid_dist and search all its neighbor blocks. 
+	    If any of the k’s neighbor blocks is valid:
+	        Determines the cost from start to the block (start to k + k to block).
+	        If the block index in not in grid_dist or cost < old value, updates grid_dist[block_index] = cost. Updates pre_dist[block_index] = k.  
+	        Delete k from grid_dist
+		    
+    3. Extract the path from pre_dist: 
 
-3. Extract the path from pre_dist: 
-
-    curr = destination
-    while pre_dist[curr] != -1:
-        Adds curr to the beginning of optimal_path_list
-        curr = pre_grids[curr]
-    Adds the start point to the beginning of optimal_path_list
+    	curr = destination
+	    while pre_dist[curr] != -1:
+		Adds curr to the beginning of optimal_path_list
+		curr = pre_grids[curr]
+	    Adds the start point to the beginning of optimal_path_list
 
 <p align="center">
   <img src="image/dijsktra_example.jpg" width="500">
@@ -134,7 +132,8 @@ We use q-learning as our main algorithm to train the agent to find the optimal p
 
 Q-table: 
 
-Our q-table has 500 states (5 * 5 * 5 * 4). The first “5” and the second “5” are possible x-axis locations and z-axis locations because the agent can only make an action on the chest and emerald block. The third “5” is a possible package location. While our map has 4 chests and 4 possible pickup locations the package is initially in. It is also possible that the package is already in our agent’s inventory slot. Thus there are 5 possible package locations. The final “4” is the possible drop-off location. Besides, the package location is 0-3 if it is inside one of the boxes and 4 if it is carried by our agent. 
+Our q-table has 500 states (5 * 5 * 5 * 4). The first “5” and the second “5” are possible x-axis locations and z-axis locations. The third “5” is a possible package location. While our map has 4 chests and 4 possible pickup locations the package is initially in. It is also possible that the package is already in our agent’s inventory slot. Thus there are 5 possible package locations. The final “4” is the possible drop-off location. Besides, the package location is 0-3 if it is inside one of the boxes and 4 if it is carried by our agent. 
+
 We store the q-table in a dictionary. Each state is a key, and the q-values of actions is the corresponding value. With 500 states and 6 possible actions in each state, our q-table stores a total of 3000 q-values.
 
 Update Q-Value:
@@ -185,5 +184,10 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
 
 
 ## References
-
-
+- Parameter of q-learning formula https://stackoverflow.com/questions/1854659/alpha-and-gamma-parameters-in-qlearning
+- Ε-greedy exploration (figure) https://www.geeksforgeeks.org/epsilon-greedy-algorithm-in-reinforcement-learning/
+- Q-Learning Algorithm Library https://pypi.org/project/pyqlearning/
+- Assignments from CS 175
+- tabular_q_learning.py from malmo example
+- XML Schema Documentation https://microsoft.github.io/malmo/0.30.0/Schemas/Mission.html
+- Taxi-v2 from Gym (https://gym.openai.com/envs/Taxi-v2/)
