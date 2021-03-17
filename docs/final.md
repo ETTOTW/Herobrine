@@ -188,12 +188,12 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
 ## Evaluation
 
 <p align="center">
-  <img src="image/Random%20and%20Q%20Learning%20training%20reward%20compare.png" width="500">
+  <img src="image/Random%20and%20Q%20Learning%20training%20reward%20compare.png" width="1000">
 </p>
 
 
 <p align="center">
-  <img src="image/dijkstra%20ql%20test%20reward.png.png" width="500">
+  <img src="image/dijkstra%20ql%20test%20reward.png" width="1000">
 </p>
 
 
