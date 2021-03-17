@@ -77,10 +77,10 @@ def GetMissionXML(start):
     blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='soul_sand' />".format(5,4)
     blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(3,0)
     blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(3,2)
-    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(5,8)
+    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(1,6)
+    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(1,8)
     blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(5,6)
-    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(7,0)
-    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(7,3)
+    blockPosXML += "<DrawBlock x='{}'  y='1' z='{}' type='grass' />".format(5,8)
         
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
