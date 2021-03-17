@@ -14,7 +14,11 @@ MineExpress is an Artificial Intelligence project developed for routing or deliv
   <img src="image/AI_process.png" width="250">
 </p>
 
-This project took inspiration from taxi-v3 from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions and finds the optimal path.
+The mission is inspired by TSP (Traveling Salesman Problem), and we also reference the taxi-v3 environment from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions.
+
+#### **Motivation:**
+
+During the pandemic of the covid-19, many people stayed at home to ensure their safety. At this time, food and express delivery often face the problem of insufficient manpower. An AI that can adapt to any environment and perform such work can greatly facilitate people's lives. We hope to develop such AI that can deliver packages correctly with low time consumption. Since the situation is more complex than the simulation in the real world, using Reinforcement Learning algorithms is essential because it allows our agents to learn from and adapt to any new environment. For example, a pizza delivery AI wants to deliver the food to a new neighborhood. AI/ML algorithms allow the AI to learn human intervention. Also, in our study, we are trying to apply reinforcement learning algorithms to the pathfinding problem to demonstrate the feasibility of reinforcement learning algorithms in this field which is commonly solved by mathematical machine learning algorithms. 
 
 #### **Environment Settings:**
 
@@ -33,14 +37,9 @@ Block Types summary:
     - Pickup / Drop-off state: Chest
     - Common Speed: Stone
     - Speed Down: Soul Sand
-    
-#### **Motivation:**
-
-During the period of the covid virus, many people stayed at home to ensure their safety. At this time, food and express delivery often face the problem of insufficient manpower. An AI that can adapt to any environment and perform such work can greatly facilitate people's lives. We hope to develop such AI. It should not pick up or drop off the package at the wrong place. It should also choose the right path that minimizes the total delivery time. Using AI/ML algorithms is essential because it allows our agent to learn from the environment. Our agent can thus adapt to any new environment. In many real situations, the environment will not be known to the agent, for example, a pizza delivery AI wants to deliver the food to a new neighborhood. AI/ML algorithms allow the AI to learn human intervention.
 
 
 ## Approaches
-We will introduce how the random action, Dijkstra's algorithm, and the q-learning algorithm are used in this project below.
 
 #### **Setting For All Approaches**
 
