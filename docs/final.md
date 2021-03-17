@@ -16,7 +16,7 @@ MineExpress is an Artificial Intelligence project developed for routing or deliv
 
 This project took inspiration from taxi-v3 from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions and finds the optimal path.
 
-**Environment Settings:**
+####Environment Settings:
 
 <p align="center">
   <img src="image/map_intro.jpg" width="500">
@@ -34,7 +34,7 @@ Block Types summary:
     - Common Speed: Stone
     - Speed Down: Soul Sand
     
-**Motivation:**
+####Motivation:
 
 During the period of the covid virus, many people stayed at home to ensure their safety. At this time, food and express delivery often face the problem of insufficient manpower. An AI that can adapt to any environment and perform such work can greatly facilitate people's lives. We hope to develop such AI. It should not pick up or drop off the package at the wrong place. It should also choose the right path that minimizes the total delivery time. Using AI/ML algorithms is essential because it allows our agent to learn from the environment. Our agent can thus adapt to any new environment. In many real situations, the environment will not be known to the agent, for example, a pizza delivery AI wants to deliver the food to a new neighborhood. AI/ML algorithms allow the AI to learn human intervention.
 
@@ -42,9 +42,9 @@ During the period of the covid virus, many people stayed at home to ensure their
 ## Approaches
 We will introduce how the random action, Dijkstra's algorithm, and the q-learning algorithm are used in this project below.
 
-**Setting For All Approches**
+####Setting For All Approches
 
-Actions:
+**Actions:**
 
 We use discrete movement commands to train our agents because using continuous movement will make it harder to determine the q-value for an individual state. There are 6 possible actions in a state:
 
@@ -55,7 +55,7 @@ We use discrete movement commands to train our agents because using continuous m
     4: picup
     5: drop-off
 
-Rewards:
+**Rewards:**
 
     - Pass the soul sand path (that slows down the agent’s speed): -4
     - Pass the stone path (with normal speed): -1
@@ -66,6 +66,8 @@ Rewards:
 Malmo XML does not support any of the above reward settings. Because the dropoff location is only valid to drop-off when the package has picked up, and because the pickup location will no longer be valid to pick up after the package has picked up, the validity of these blocks changes when a mission is running. The built-in reward element <RewardForTouchingBlockType> does not support it. It neither can give the right rewards to different blocks our agent passed because <RewardForTouchingBlockType> only rewards for blocks the agent currently stands on, while it does not know about the previous block type. 
 	
 We self-defined all the rewards. We store the previous block type, look it up when summing rewards, and update it in each iteration to reward for passing different types of blocks. To determine the validity of each block to pick up and drop off, we store the pickup and dropoff location as a class variable. When the action pickup is executed, we check if the package has not been picked up and the pickup location matches the current agent location. if the condition fails, we reward negatively. Similarly, when the action drop-off is executed, we check if the package is carried by the agent and two locations match.
+
+###Algorithms
 
 **Random Action**
 
@@ -184,6 +186,27 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
   
 
 ## Evaluation
+
+<p align="center">
+  <img src="image/Random%20and%20Q%20Learning%20training%20reward%20compare.png" width="500">
+</p>
+
+
+<p align="center">
+  <img src="image/dijkstra%20ql%20test%20reward.png.png" width="500">
+</p>
+
+
+####Quantitative
+
+From the figure, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
+    
+Figure 2 is the test reward comparison between the Dijkstra and Q learning algorithms. In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. And, we also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
+
+####Qualitative
+
+For Qualitative evaluation, we can simply monitor the action, reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation.
+
 
 
 ## References
