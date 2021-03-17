@@ -85,11 +85,13 @@ To find the optimal a path from a start point to destination, we use Dijkstra's 
 
     (2. Add path to pre_dist)
     While grid_dist is not empty:
-    	Choose a key k with the smallest value from grid_dist and search all its neighbor blocks. 
+    	Choose a key k with the smallest value from grid_dist
     	If any of the k’s neighbor blocks is valid:
-    		Determines the cost from start to the block (start to k + k to block).
-    		If the block index in not in grid_dist or cost < old value, updates grid_dist[block_index] = cost. Updates pre_dist[block_index] = k.  
-    		Delete k from grid_dist
+    		Determines the cost from start to the block (start to k + k to block)
+    		If the block index in not in grid_dist or cost < old value:
+    			Updates grid_dist[block_index] = cost
+    			Updates pre_dist[block_index] = k 
+    		Deletes k from grid_dist
 		    
     (3. Extract the path from pre_dist)
     curr = destination
