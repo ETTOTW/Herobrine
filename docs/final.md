@@ -170,7 +170,7 @@ It allows our agent to choose the current best action with a high probability. W
 
 Summing up:
 
-the whole process of training out agent by q-learning is shown below:
+the whole process of training our agent by q-learning is shown below:
 
 <p align="center">
   <img src="image/q-learning.png" width="500">
