@@ -8,7 +8,7 @@ title:  Final
 </p>
 
 ## Project Summary
-MineExpress is an Artificial Intelligence project developed for routing or delivery tasks, like amazon shipping, Uber, or UberEat. Our goal is to train our agent to pick up and drop off packages or food to the right places. At the same time, we aim to find an optimal path to navigate our agent to those places. To achieve this, we utilized three methods: q-learning algorithm, Dijkstra's algorithm, and random action. Q-learning is our main algorithm. It utilized an agent-environment loop shown below. Within each process, the agent chooses an action, and the environment returns an observation and rewards. We will visualize this process of learning in the game Minecraft and Malmo platform.
+MineExpress is an Artificial Intelligence project developed for routing or delivery tasks, like amazon shipping, Uber, or UberEat. Our goal is to train our agents to pick up and drop off packages or food to the right places. At the same time, we aim to find an optimal path to navigate our agent to those places. To achieve this, we utilized three methods: q-learning algorithm, Dijkstra's algorithm, and random action. Q-learning is our main algorithm. It utilized an agent-environment loop shown below. Within each process, the agent chooses an action, and the environment returns an observation and rewards. We will visualize this process of learning in the game Minecraft and Malmo platform.
 
 <p align="center">
   <img src="image/AI_process.png" width="250">
@@ -26,7 +26,7 @@ During the pandemic of the covid-19, many people stayed at home to ensure their 
   <img src="image/map_intro.jpg" width="500">
 </p>
 
-Figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. These state either has a green block or chest (brown block) in the center. It also have 4 possible locations that are valid for pickup or drop-off. These locations has a chest in the center. At the beginning of each mission, one of the four states that have a chest will be assigned as the package location for pickup, and one of the remaining three states will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
+The figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. This state either has a green block or a chest (brown block) in the center. It also has 4 possible locations that are valid for pickup or drop-off. These locations have a chest in the center. At the beginning of each mission, one of the four states that have a chest will be assigned as the package location for pickup, and one of the remaining three states will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
 There are two types of the path. It simulates the real-world environment with different moving speeds for routes. The stone blocks are the path with normal speed. The soul sand block, however, slows down the speed of our agent.
 
 Our agent will start randomly at a state. 
