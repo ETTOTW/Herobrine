@@ -207,6 +207,10 @@ Figure 2 is the test reward comparison between the Dijkstra and Q learning algor
 
 #### **Qualitative**
 
+<div align="center">
+<iframe width="1280" height="800" src="https://www.youtube.com/embed/3pEZp9qVyGU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 For Qualitative evaluation, we can simply monitor the action, reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation.
 
 
