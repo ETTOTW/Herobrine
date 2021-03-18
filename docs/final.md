@@ -80,7 +80,7 @@ We use random actions to be the baseline of the q-learning algorithm. It simply 
 
 We use Dijkstra's algorithm as the upper bound for the q-learning algorithm because Dijkstra’s algorithm can always find the overall optimal path with enough information about the environment. We use the same discrete movement commands and action list as the q-learning algorithm for comparison.
 
-To find the optimal a path from a start point to destination, we use Dijkstra's algorithm in following steps:
+To find the optimal path from a start point to destination, we use Dijkstra's algorithm in following steps:
 
     (1. Initialize two priority dictionaries and save the start point)
     grid_dist[ {key=block index}: {value=cost from the start to the key} ]
