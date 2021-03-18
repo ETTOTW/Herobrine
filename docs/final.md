@@ -4,8 +4,9 @@ title:  Final
 ---
 
 ## Video
-<iframe  align="center" width="854" height="480" src="https://www.youtube.com/embed/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<div align="center">
+<iframe   width="854" height="480" src="https://www.youtube.com/embed/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 ## Project Summary
 <p align="center">
