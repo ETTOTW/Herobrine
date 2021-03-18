@@ -149,11 +149,11 @@ Our q-table is initially empty. After an action is executed, We store the previo
 </p>
 
     α: learning rate (range from 0 to 1)
-    γ: discount rate for future rewards (range from 0 to 1). 
+    γ: discount rate for future rewards (range from 0 to 1)
     
 Good choices of α and γ are important to the performance of our agent. For example, setting α to 0.1 and γ to 1 makes the agent stick to a feasible but non-optimal path. We finally set α to 0.1 and 0.6 after some tests.
 
-    Q(s, a) : previous state and action; 
+    Q(s, a) : previous state and action
     maxQ’(s’, a’): q-value for the best action in the agent's current state
     R(s,a): reward after executing the previous action. 
     
