@@ -70,7 +70,7 @@ Malmo XML does not support any of the above reward settings. Because the dropoff
 	
 We self-defined all the rewards. We store the previous block type, look it up when summing rewards, and update it in each iteration to reward for passing different types of blocks. To determine the validity of each block to pick up and drop off, we store the pickup and dropoff location as a class variable. When the action pickup is executed, we check if the package has not been picked up and the pickup location matches the current agent location. if the condition fails, we reward negatively. Similarly, when the action drop-off is executed, we check if the package is carried by the agent and two locations match.
 
-#### **Algorithms**
+## **Algorithms**
 
 **Random Action**
 
