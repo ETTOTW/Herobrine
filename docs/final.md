@@ -4,11 +4,10 @@ title:  Final
 ---
 
 ## Video
+
 <iframe width="420" height="315"
 src="https://youtu.be/Y4gzj4B-hj4">
 </iframe>
-
-
 
 <p align="center">
   <img src="image/pizza.png" width="500">
