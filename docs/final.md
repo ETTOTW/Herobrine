@@ -5,8 +5,6 @@ title:  Final
 
 ## Video
 
-<iframe width="854" height="480" src="https://youtu.be/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 <p align="center">
   <img src="image/pizza.png" width="500">
 </p>
