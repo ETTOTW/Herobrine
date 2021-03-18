@@ -4,10 +4,9 @@ title:  Final
 ---
 
 ## Video
+<iframe width="718" height="404" src="https://www.youtube.com/embed/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<iframe width="420" height="315"
-src="https://youtu.be/Y4gzj4B-hj4">
-</iframe>
+
 
 <p align="center">
   <img src="image/pizza.png" width="500">
