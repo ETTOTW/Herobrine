@@ -4,8 +4,7 @@ title:  Final
 ---
 
 ## Video
-To be Added
-
+<iframe width="854" height="480" src="https://youtu.be/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <p align="center">
   <img src="image/pizza.png" width="500">
@@ -55,7 +54,7 @@ We use discrete movement commands to train our agents because using continuous m
     1: move south
     2: move east
     3: move west
-    4: pickup
+    4: picup
     5: drop-off
 
 **Rewards:**
