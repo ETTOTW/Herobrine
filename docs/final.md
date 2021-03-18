@@ -127,15 +127,13 @@ For example, we want to find an optimal path from block 1 to block 4 showing abo
     	pre_dist[ 1:-1, 2:1, 4:3, 3:2 ]
     End
     
-The pre_dist provides us the optimal_path_list = [1, 2, 3, 4]. 
-
-Once we get the path_list, we can navigate our agent to finish the mission.
+The above pre_dist provides us the optimal_path_list = [1, 2, 3, 4]. Once we get this path_list, we can navigate our agent to finish the mission.
 
 For rewards, we go through the optimal_path_list. If the block is stone, we minus 1 to the reward; if the block is soul sand, we minus 4 to the reward. The reward is added to 20 when the mission ends.
 
 **Q-Learning Algorithm**
 
-We use q-learning as our main algorithm to train the agent to find the optimal path both from the starting location to the pickup location and from the pickup location to the drop-off position. Given an agent state and an action, the algorithm stores the corresponding q-values in a table and updates the table each time after an action is executed. 
+We use the q-learning as our main algorithm to train the agent to find the optimal path both from the starting location to the pickup location and from the pickup location to the drop-off position. Given an agent state and an action, the algorithm stores the corresponding q-values in a table and updates the table each time after an action is executed. 
 
 Q-table: 
 
