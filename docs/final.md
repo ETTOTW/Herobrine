@@ -55,7 +55,7 @@ We use discrete movement commands to train our agents because using continuous m
     1: move south
     2: move east
     3: move west
-    4: picup
+    4: pickup
     5: drop-off
 
 **Rewards:**
