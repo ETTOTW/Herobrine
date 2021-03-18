@@ -4,13 +4,13 @@ title:  Final
 ---
 
 ## Video
-<iframe width="854" height="480" src="https://www.youtube.com/embed/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe  align="center" width="854" height="480" src="https://www.youtube.com/embed/Y4gzj4B-hj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ## Project Summary
-
+<p align="center">
   <img src="image/pizza.png" width="854">
-
+</p>
 
 MineExpress is an Artificial Intelligence project developed for routing or delivery tasks, like amazon shipping, Uber, or UberEat. Our goal is to train our agents to pick up and drop off packages or food to the right places. At the same time, we aim to find an optimal path to navigate our agent to those places. To achieve this, we utilized three methods: q-learning algorithm, Dijkstra's algorithm, and random action. Q-learning is our main algorithm. It utilized an agent-environment loop shown below. Within each process, the agent chooses an action, and the environment returns an observation and rewards. We will visualize this process of learning in the game Minecraft and Malmo platform.
 
