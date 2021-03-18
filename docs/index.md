@@ -7,7 +7,7 @@ title:  Home
 </p>
 
 ## About MineExpress:
-MineExpress is an Artificial Intelligence Malmo based project developed for any type of routing or delivery tasks, like Uber and amazon shipping. Our goal is to provide the most efficient method of traveling with many other actions taking into account.  An agent that starts a random position will go to a random destination within the minimum amount of time and avoid dropping into the lava. The path contains blocks with different moving speeds, thus we train our agent to find the optimal path. We will utilize Minecraft and Malmo to visualize our project. 
+MineExpress is an Artificial Intelligence project developed for routing or delivery tasks like Uber and amazon shipping. In this project, our agent is placed in a random location. There are also two random locations to pick up a package and drop off the package. We train our agents to find an optimal path to deliver the package to the destination. By adding paths contains blocks with different moving speeds, we also aim to minimize the delivery time. We use the q-learning algorithm as our main algorithm, Dijkstra's algorithm as the upper bound, and random actions as the baseline. This project is visualized in the game Minecraft and Malmo platform.
 
 
 ## Reports:
