@@ -23,13 +23,13 @@ During the pandemic of the covid-19, many people stayed at home to ensure their 
 #### **Environment Settings:**
 
 <p align="center">
-  <img src="image/map_intro.jpg" width="500">
+  <img src="image/map_intro2.jpg" width="500">
 </p>
 
-The figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. This state either has a green block or a chest (brown block) in the center. It also has 4 possible locations that are valid for pickup or drop-off. These locations have a chest in the center. At the beginning of each mission, one of the four states that have a chest will be assigned as the package location for pickup, and one of the remaining three states will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
+The figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. This location either has a green block or a chest (brown block) in the center. It also has 4 possible locations that are valid for pickup or drop-off. These locations have a chest in the center. At the beginning of each mission, one of the four location that have a chest will be assigned as the package location for pickup, and one of the remaining three locations will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
 There are two types of the path. It simulates the real-world environment with different moving speeds for routes. The stone blocks are the path with normal speed. The soul sand block, however, slows down the speed of our agent.
 
-Our agent will start randomly at a state. 
+Our agent will start randomly in one of the 25 locations. 
 
 Block Types summary:
 
