@@ -135,7 +135,7 @@ For rewards, we go through the optimal_path_list. If the block is stone, we minu
 
 **Q-Learning Algorithm**
 
-We use the q-learning as our main algorithm to train the agent to find the optimal path both from the starting location to the pickup location and from the pickup location to the drop-off position. Given an agent state and an action, the algorithm stores the corresponding q-values in a table and updates the table each time after an action is executed. 
+The Q-learning algorithm learns through the following series of actions: observes the environment, takes the best actions, measures the rewards, and updates the q-table. 
 
 Q-table: 
 
@@ -184,7 +184,7 @@ the whole process of training our agent by q-learning is shown below:
 
 Dijkstra's algorithm is easy to implement and can find the optimal solution much faster than q-learning. For our problem, Training our agent with q-learning can take up to a day in the Malmo platform, however, Dijkstra's algorithm only runs for a few seconds for each mission. If our agent knows how the surrounding environment looks, Dijkstra's algorithm is more useful than q-learning.  
 
-However, for many real-world tasks, the agent is placed in an unfamiliar environment, and Dijkstra's algorithm will not work. It is because Dijkstra's algorithm needs to find the path using the environment information before it can make an action. For example, in our problem, we set <ObservationFromGrid> parameters to the value that all valid block is observable (min x/z = -twice of the map, max x/z = twice of the map). Comparatively, q-learning can work with block information right below the agent. Thus comparing to Dijkstra's algorithm that has limited usage, q-learning algorithm can be used in a variety of problems. It can continuously learn from a new environment.
+However, for many real-world tasks, the agent is placed in an unfamiliar environment, and Dijkstra's algorithm will not work. It is because Dijkstra's algorithm needs to find the path using the environment information before it can make an action. For example, in our problem, we give it full state observation by setting <ObservationFromGrid> parameters (min x/z = -twice of the map, max x/z = twice of the map). Comparatively, q-learning can work with block information right below the agent. Thus comparing to Dijkstra's algorithm that has limited usage, the q-learning algorithm can be used in a variety of problems. It can gradually learn from a new environment.
   
 
 ## Evaluation
