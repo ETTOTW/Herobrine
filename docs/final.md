@@ -211,7 +211,9 @@ Figure 2 is the test reward comparison between Dijkstra's algorithm and the q-le
 <iframe width="854" height="480" src="https://www.youtube.com/embed/3pEZp9qVyGU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-For Qualitative evaluation, we can simply monitor the action, reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation.
+For qualitative evaluation, we can simply monitor the action, the reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation. 
+
+The video above shows our agent performance of the q-learning algorithm after training. We can see that our agent chooses the path that leads to the highest reward. For example, when there is a soul sand path in front of our agent, it will choose to take a detour (take three stone paths) because a soul sand path costs 4, while three stone paths only cost 3.
 
 
 
