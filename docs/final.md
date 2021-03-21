@@ -246,7 +246,7 @@ The video above shows the performance of the random movement and q-learning agen
 
 ## Contribution
 
- - Jason Li: Research in different RL algorithms; attempt in the q-learning algorithm; write and revise the [final report](https://yachilee.github.io/Herobrine/final.html); record videos; update [Github page](https://github.com/yachilee/Herobrine).
+ - Jason Li: Research in different RL algorithms; attempt in the [q-learning algorithm (not used)] (https://github.com/yachilee/Herobrine/blob/main/MineExpress/draft2.py); write and revise the [final report](https://yachilee.github.io/Herobrine/final.html); record videos; update [Github page](https://github.com/yachilee/Herobrine).
 
  - Yachi Lee: Implement [Dijkstra algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_dijkstra2.py); attempt in the [q-learning algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_ql_v1.py); make the [slide for the final video](https://docs.google.com/presentation/d/17Mrflf8M_dEWAVq4DpzN-jGSlUjPPT_Wu_aerAZTE9c/edit?usp=sharing); write approach and motivation and revise other parts of the [final report](https://yachilee.github.io/Herobrine/final.html); record video; make the sanity check, and the [baseline for a status report](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_baseline.py).
 
