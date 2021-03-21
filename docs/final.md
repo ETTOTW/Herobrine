@@ -238,7 +238,9 @@ The video above shows the performance of the random movement and q-learning agen
 
 ## Further Improvements
 1. Adjust the hyper-parameters of the current q-learning agent to avoid the local optimum and get better performance.
+   
 2. Increase the complexity of the problem to make the problem more similar to the real situation.
+   
 3. Try more reinforcement algorithms, such as DQN, A3C, to solve the problem.
 
 
