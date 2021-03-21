@@ -79,7 +79,7 @@ We self-defined all the rewards. We store the previous block type, look it up wh
 
 **Random Action**
 
-We use random actions to be the baseline of the q-learning algorithm. It simply chooses one of the 6 actions each state.
+We use random actions to be the baseline of the q-learning algorithm. It simply chooses one of the 6 actions at each state.
 
 **Dijkstra’s Algorithm**
 
@@ -146,13 +146,13 @@ The Q-learning algorithm learns through the following series of actions: observe
 
 Q-table: 
 
-Our q-table has 500 states (5 * 5 * 5 * 4). The first “5” and the second “5” are possible x-axis locations and z-axis locations. The third “5” is a possible package location. While our map has 4 chests and 4 possible pickup locations the package is initially in. It is also possible that the package is already in our agent’s inventory slot. Thus there are 5 possible package locations. The final “4” is the possible drop-off location. Besides, the package location is 0-3 if it is inside one of the boxes and 4 if it is carried by our agent. 
+Our q-table has 500 states (5 * 5 * 5 * 4). 25 possible locations for the agent, 4 possible source locations for the package, and 4 possible locations for the destination. Also, since our agent has to pick up the package before delivering it to the designation；and it is not reasonable for the agent to finish the mission before picking up the package. We also need to consider the difference between pickup and delivery state. Therefore, there are 5 possible package locations since the package may be any of the four chests or inventory slot of the agent. And, we encode all the information into one state number to show our agent different state as the observation. The state number range is from 0 to 499. 
 
-We store the q-table in a dictionary. Each state is a key, and the q-values of actions is the corresponding value. With 500 states and 6 possible actions in each state, our q-table stores a total of 3000 q-values.
+We store the q-table in a 2-dimensional NumPy array, with 500 rows and 6 columns. Each row represents a state, and each column represents an action at the specific state. With 500 states and 6 possible actions in each state, our q-table stores a total of 3000 q-values.
 
 Update Q-Value:
 
-Our q-table is initially empty. After an action is executed, We store the previous state into the q-table and update the q-value for the action. The q-value is determined by the equation below:
+Initially, all q-values in the q-table are 0. After an action is executed, We store the previous state into the q-table and update the q-value for the action. The q-value is determined by the equation below:
 
 
 
@@ -164,13 +164,13 @@ Our q-table is initially empty. After an action is executed, We store the previo
     α: learning rate (range from 0 to 1)
     γ: discount rate for future rewards (range from 0 to 1)
     
-Good choices of α and γ are important to the performance of our agent. For example, setting α to 0.1 and γ to 1 makes the agent stick to a feasible but non-optimal path. We finally set α to 0.1 and 0.6 after some tests.
+Good choices of α and γ are important to the performance of our agent. For example, setting α to 0.1 and γ to 0.99 makes the agent stick to a feasible but non-optimal path. We finally set α to 0.7 and γ to 0.618 after some tests.
 
     Q(s, a) : previous state and action
     maxQ’(s’, a’): q-value for the best action in the agent's current state
     R(s,a): reward after executing the previous action. 
     
-For example, if our agent is initialized in the location (0, 0). The package location indexed is 1, and the dropoff location index is 2. An action, such as move south, updates the state of (0, 0, 1, 2) and its action space 1. In this case, s is (0, 0, 1, 2); a is 1; s’ is (0,1); a’ can be any action because they are all 0 at the beginning of the training.
+For example, if our agent is initialized in the location (0, 0). The package location indexed is 1, and the drop-off location index is 2. An action, such as move south, updates the state 6 (4 * (5 * (5 * 0 + 0) + 1) + 2) and its action space 1, which represent move east. In this case, s’ will be 26 (4 * (5 * (5 * 0 + 1) + 1) + 2); and a’ can be any action because they are all 0 at the beginning of the training.
 
 Next Actions:
 
@@ -182,20 +182,28 @@ A new action is chosen by ε-greedy exploration below.
     <div>Figure 5</div>
 </center>
 
+<center>
+    <img src="image/epsilon-greedy.png" width="500">
+    <div>Figure 6</div>
+</center>
 
-It allows our agent to choose the current best action with a high probability. While sometimes the agent can also choose other actions that may lead to higher reward. We set ε to 0.1.
+It allows our agent to choose the current best action based on the q-table while ensuring some Randomness of choice to avoid our agent stack at a local optimum. We also apply an exponential decay to the epsilon based on the formula shown in Figure 6, to make the epsilon reduces faster at the beginning and gradually converge at a specific value.
+
+The parameters for epsilon-greedy exploration shows below:
+    
+    Initial Epsilon(ε_max): 1
+    Min Epsilon(ε_min): 0.2
+    Decay Rate(λ): 0.001
+    Episode(t): 0~4999
 
 Summing up:
 
 the whole process of training our agent by q-learning is shown below:
 
-
-
 <center>
     <img src="image/q-learning.png" width="500">
-    <div>Figure 6</div>
+    <div>Figure 7</div>
 </center>
-
 
 **Comparison between Dijkstra's algorithm and q-learning:**
 
@@ -208,22 +216,20 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
 
 <center>
   <img src="image/Random%20and%20Q%20Learning%20training%20reward%20compare.png" width="1000">
-    <div>Figure 7</div>
+    <div>Figure 8</div>
 </center>
-
-
 
 <center>
   <img src="image/dijkstra%20ql%20test%20reward.png" width="1000">
-  <div>Figure 8</div>
+  <div>Figure 9</div>
 </center>
 
 
 #### **Quantitative**
 
-From the figure 7, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
+From the figure 8, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
     
-Figure 8 is the test reward comparison between Dijkstra's algorithm and the q-learning algorithm (after training). In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. We also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
+Figure 9 is the test reward comparison between Dijkstra's algorithm and the q-learning algorithm (after training). In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. We also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
 
 #### **Qualitative**
 
