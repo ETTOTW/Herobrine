@@ -15,9 +15,11 @@ title:  Final
 
 MineExpress is an Artificial Intelligence project developed for routing or delivery tasks, like amazon shipping, Uber, or UberEat. Our goal is to train our agents to pick up and drop off packages or food to the right places. At the same time, we aim to find an optimal path to navigate our agent to those places. To achieve this, we utilized three methods: q-learning algorithm, Dijkstra's algorithm, and random action. Q-learning is our main algorithm. It utilized an agent-environment loop shown below. Within each process, the agent chooses an action, and the environment returns an observation and rewards. We will visualize this process of learning in the game Minecraft and Malmo platform.
 
-<p align="center">
-  <img src="image/AI_process.png" width="250">
-</p>
+<center>
+    <img src="image/AI_process.png" width="250">
+    <div>Figure 1</div>
+</center>
+
 
 The mission is inspired by TSP (Traveling Salesman Problem), and we also reference the taxi-v3 environment from Gym (OpenAI) by stimulating the same game settings where our agent has pickup and drop-off actions.
 
@@ -27,9 +29,11 @@ During the pandemic of the covid-19, many people stayed at home to ensure their 
 
 #### **Environment Settings:**
 
-<p align="center">
-  <img src="image/map_intro2.jpg" width="500">
-</p>
+
+<center>
+    <img src="image/map_intro2.jpg" width="500">
+    <div>Figure 2</div>
+</center>
 
 The figure above shows our training environment. The arena is 45 * 45 with 25 possible locations where our agent can make an action. This location either has a green block or a chest (brown block) in the center. It also has 4 possible locations that are valid for pickup or drop-off. These locations have a chest in the center. At the beginning of each mission, one of the four location that have a chest will be assigned as the package location for pickup, and one of the remaining three locations will be assigned as the destination for drop-off. Our agent should only pick the package up at the package location and drop it off at the destination.
 There are two types of the path. It simulates the real-world environment with different moving speeds for routes. The stone blocks are the path with normal speed. The soul sand block, however, slows down the speed of our agent.
@@ -106,9 +110,12 @@ To find the optimal path from a start point to destination, we use Dijkstra's al
     	curr = pre_grids[curr]
     Add the start point to the beginning of optimal_path_list
 
-<p align="center">
-  <img src="image/dijsktra_example.jpg" width="500">
-</p>
+
+
+<center>
+    <img src="image/dijsktra_example.jpg" width="500">
+    <div>Figure 3</div>
+</center>
 
 For example, we want to find an optimal path from block 1 to block 4 showing above, grid_dist and pre_dist will undergo the following changes:
 
@@ -147,9 +154,12 @@ Update Q-Value:
 
 Our q-table is initially empty. After an action is executed, We store the previous state into the q-table and update the q-value for the action. The q-value is determined by the equation below:
 
-<p align="center">
-  <img src="image/q-value formula.png" width="500">
-</p>
+
+
+<center>
+     <img src="image/q-value formula.png" width="500">
+    <div>Figure 4</div>
+</center>
 
     α: learning rate (range from 0 to 1)
     γ: discount rate for future rewards (range from 0 to 1)
@@ -166,9 +176,12 @@ Next Actions:
 
 A new action is chosen by ε-greedy exploration below.
 
-<p align="center">
-  <img src="image/greedy.png" width="500">
-</p>
+
+<center>
+    <img src="image/greedy.png" width="500">
+    <div>Figure 5</div>
+</center>
+
 
 It allows our agent to choose the current best action with a high probability. While sometimes the agent can also choose other actions that may lead to higher reward. We set ε to 0.1.
 
@@ -176,9 +189,13 @@ Summing up:
 
 the whole process of training our agent by q-learning is shown below:
 
-<p align="center">
-  <img src="image/q-learning.png" width="500">
-</p>
+
+
+<center>
+    <img src="image/q-learning.png" width="500">
+    <div>Figure 6</div>
+</center>
+
 
 **Comparison between Dijkstra's algorithm and q-learning:**
 
@@ -189,26 +206,31 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
 
 ## Evaluation
 
-<p align="center">
+<center>
   <img src="image/Random%20and%20Q%20Learning%20training%20reward%20compare.png" width="1000">
-</p>
+    <div>Figure 7</div>
+</center>
 
 
-<p align="center">
+
+<center>
   <img src="image/dijkstra%20ql%20test%20reward.png" width="1000">
-</p>
+  <div>Figure 8</div>
+</center>
 
 
 #### **Quantitative**
 
-From the figure, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
+From the figure 7, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
     
-Figure 2 is the test reward comparison between the Dijkstra and Q learning algorithms. In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. And, we also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
+Figure 8 is the test reward comparison between the Dijkstra and Q learning algorithms. In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. And, we also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
 
 #### **Qualitative**
 
+
+
 <div align="center">
-<iframe width="854" height="480" src="https://www.youtube.com/embed/3pEZp9qVyGU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="854" height="480" src="https://www.youtube.com/embed/2IK6h5-7R-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 For Qualitative evaluation, we can simply monitor the action, reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation.
