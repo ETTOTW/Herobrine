@@ -227,23 +227,42 @@ Figure 8 is the test reward comparison between Dijkstra's algorithm and the q-le
 
 #### **Qualitative**
 
-
-
 <div align="center">
 <iframe width="854" height="480" src="https://www.youtube.com/embed/2IK6h5-7R-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 For qualitative evaluation, we can simply monitor the action, the reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation. 
 
-The video above shows our agent performance of the q-learning algorithm after training. We can see that our agent chooses the path that leads to the highest reward. For example, when there is a soul sand path in front of our agent, it will choose to take a detour (take three stone paths) because a soul sand path costs 4, while three stone paths only cost 3.
+The video above shows the performance of the random movement and q-learning agent. We can see the random movement agent chooses actions randomly and cannot complete the mission. In contrast, we can see that our well-trained q-learning agent chooses the path that leads to the highest reward. For example, in the first episode, when there is a soul sand path in front of our agent, it will choose to take a detour (take three stone paths) because a soul sand path costs 4, while three stone paths only cost 3. However, in the third episode, our agent also chooses the soul sand path and failed to find the optimal path. We believe that our agent achieves a local optimum during the training, and we may get a better result with a larger minimum epsilon or smaller decay rate.
+
+
+## Further Improvements
+1. Adjust the hyper-parameters of the current q-learning agent to avoid the local optimum and get better performance.
+2. Increase the complexity of the problem to make the problem more similar to the real situation.
+3. Try more reinforcement algorithms, such as DQN, A3C, to solve the problem.
+
+
+
+
+
+
 
 
 
 ## References
-- Parameter of q-learning formula https://stackoverflow.com/questions/1854659/alpha-and-gamma-parameters-in-qlearning
-- Ε-greedy exploration (figure) https://www.geeksforgeeks.org/epsilon-greedy-algorithm-in-reinforcement-learning/
-- Q-Learning Algorithm Library https://pypi.org/project/pyqlearning/
-- Assignments from CS 175
-- tabular_q_learning.py from malmo example
-- XML Schema Documentation https://microsoft.github.io/malmo/0.30.0/Schemas/Mission.html
-- Taxi-v2 from Gym (https://gym.openai.com/envs/Taxi-v2/)
+- Assignment 2  from CS 175
+
+- [Ε-greedy exploration (figure)](https://www.geeksforgeeks.org/epsilon-greedy-algorithm-in-reinforcement-learning)
+  
+- [Malmo Documentation](https://microsoft.github.io/malmo/0.17.0/Documentation/classmalmo_1_1_agent_host.html#a08a7af4c8986224a558344527966fc6a)
+
+- [Malmo Python_examples](https://github.com/microsoft/malmo)
+  
+- [Malmo XML Schema Documentation](https://microsoft.github.io/malmo/0.30.0/Schemas/Mission.html)
+  
+- [Parameter of q-learning formula](https://stackoverflow.com/questions/1854659/alpha-and-gamma-parameters-in-qlearning)
+  
+- [Q-Learning Algorithm Library](https://pypi.org/project/pyqlearning)
+
+- [Taxi-V3 from Gym](https://gym.openai.com/envs/Taxi-v3/)
+
