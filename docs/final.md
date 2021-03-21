@@ -242,11 +242,13 @@ The video above shows the performance of the random movement and q-learning agen
 3. Try more reinforcement algorithms, such as DQN, A3C, to solve the problem.
 
 
+## Contribution
 
+Jason Li: Research in different RL algorithms; attempt in the q-learning algorithm; write and revise the [final report](https://yachilee.github.io/Herobrine/final.html); record videos; update [Github page](https://github.com/yachilee/Herobrine).
 
+Yachi Lee: Implement [Dijkstra algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_dijkstra2.py); attempt in the [q-learning algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_ql_v1.py); make the [slide for the final video](https://docs.google.com/presentation/d/17Mrflf8M_dEWAVq4DpzN-jGSlUjPPT_Wu_aerAZTE9c/edit?usp=sharing); write approach and motivation and revise other parts of the [final report](https://yachilee.github.io/Herobrine/final.html); record video; make the sanity check, and the [baseline for a status report](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_baseline.py).
 
-
-
+Yilong Huang: Implement the [q-learning agent](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Tabular_Q_Learning/main.py), [MalmoUtils](https://github.com/yachilee/Herobrine/blob/main/MineExpress/MalmoUtils.py), [MineExpressEnv](https://github.com/yachilee/Herobrine/tree/main/MineExpress/MineExpressEnv), [MineExpressEnvSimulator](https://github.com/yachilee/Herobrine/tree/main/MineExpress/MineExpressEnvSimulator); attempt in the [deep q-learning agent](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Deep_Q_Learning/DQN_Main.py); write the evaluation and revise other parts [final report](https://yachilee.github.io/Herobrine/final.html); edit and record videos; data analysis and visualization; implement a [demo ppo agent for the status report](https://github.com/yachilee/Herobrine/blob/main/MineExpress/PPO/PPO_Agent_Main.py).
 
 
 ## References
