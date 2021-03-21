@@ -142,7 +142,7 @@ For rewards, we go through the optimal_path_list. If the block is stone, we minu
 
 **Q-Learning Algorithm**
 
-We use the q-learning as our main algorithm to train the agent to find the optimal path both from the starting location to the pickup location and from the pickup location to the drop-off position. Given an agent state and an action, the algorithm stores the corresponding q-values in a table and updates the table each time after an action is executed. 
+The Q-learning algorithm learns through the following series of actions: observes the environment, takes the best actions, measures the rewards, and updates the q-table. 
 
 Q-table: 
 
@@ -201,7 +201,7 @@ the whole process of training our agent by q-learning is shown below:
 
 Dijkstra's algorithm is easy to implement and can find the optimal solution much faster than q-learning. For our problem, Training our agent with q-learning can take up to a day in the Malmo platform, however, Dijkstra's algorithm only runs for a few seconds for each mission. If our agent knows how the surrounding environment looks, Dijkstra's algorithm is more useful than q-learning.  
 
-However, for many real-world tasks, the agent is placed in an unfamiliar environment, and Dijkstra's algorithm will not work. It is because Dijkstra's algorithm needs to find the path using the environment information before it can make an action. For example, in our problem, we set <ObservationFromGrid> parameters to the value that all valid block is observable (min x/z = -twice of the map, max x/z = twice of the map). Comparatively, q-learning can work with block information right below the agent. Thus comparing to Dijkstra's algorithm that has limited usage, q-learning algorithm can be used in a variety of problems. It can continuously learn from a new environment.
+However, for many real-world tasks, the agent is placed in an unfamiliar environment, and Dijkstra's algorithm will not work. It is because Dijkstra's algorithm needs to find the path using the environment information before it can make an action. For example, in our problem, we give it full state observation by setting <ObservationFromGrid> parameters (min x/z = -twice of the map, max x/z = twice of the map). Comparatively, q-learning can work with block information right below the agent. Thus comparing to Dijkstra's algorithm that has limited usage, the q-learning algorithm can be used in a variety of problems. It can gradually learn from a new environment.
   
 
 ## Evaluation
@@ -223,7 +223,7 @@ However, for many real-world tasks, the agent is placed in an unfamiliar environ
 
 From the figure 7, we can see that the reward trend of the random movement does not have a significant change, but it still has a 2% possibility to get an unexpected successful result, which indicates that the mission with 500 states may not be complex enough. In contrast, the reward trend of the Q-learning agent has a significant logarithmic increment; and the rewards converge at -50 after 2000 episodes. We can also see a clear learning process through the figure. In the beginning, the agent has a high failure rate, since the agent is not familiar with the arena and tries to use random behaviors for exploration. After 500 episodes, We can see that the number of failed missions has been drastically reduced, replaced by more successful missions and failed missions with pickup. Then, after around 900 episodes, the agent can complete almost all missions successfully, but we can still observe a significant increase in reward until 2000 episodes. We also noticed that the variance of the reward after 2000 episodes remains at a high level, we believe that is caused by the high minimum epsilon rate to ensure our agent would not stack in a local optimal. 
     
-Figure 8 is the test reward comparison between the Dijkstra and Q learning algorithms. In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. And, we also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
+Figure 8 is the test reward comparison between Dijkstra's algorithm and the q-learning algorithm (after training). In general, we were surprised to find that the average reward of the Dijkstra algorithm and the q learning algorithm is not significantly different. We also found that the variance of the q learning algorithm is much lower than the result in the training reward diagram, which directly proves our previous guess about the correlation between the high variance and epsilon rate. 
 
 #### **Qualitative**
 
@@ -233,7 +233,9 @@ Figure 8 is the test reward comparison between the Dijkstra and Q learning algor
 <iframe width="854" height="480" src="https://www.youtube.com/embed/2IK6h5-7R-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-For Qualitative evaluation, we can simply monitor the action, reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation.
+For qualitative evaluation, we can simply monitor the action, the reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation. 
+
+The video above shows our agent performance of the q-learning algorithm after training. We can see that our agent chooses the path that leads to the highest reward. For example, when there is a soul sand path in front of our agent, it will choose to take a detour (take three stone paths) because a soul sand path costs 4, while three stone paths only cost 3.
 
 
 

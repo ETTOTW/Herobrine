@@ -14,4 +14,5 @@ MineExpress is an Artificial Intelligence project developed for routing or deliv
 - [Proposal](proposal.html)
 - [Status](status.html)
 - [Final](final.html)
+- [Team Info and Meeting Log](team.html)
 - [Source_Code](https://github.com/yachilee/herobrine)
