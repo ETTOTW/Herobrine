@@ -1,24 +1,24 @@
-import argparse, time
+import os
+import time
+import pickle
+import argparse
 import numpy as np
-from MineExpressSimulator import  MineExpressSimulator
+from MineExpressSimulator import MineExpressSimulator
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-import os
-
-os.chdir("../MineExpressEnv")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--total_episodes", type=int, default=1000)
+    parser.add_argument("--total_episodes", type=int, default=5000)
     parser.add_argument("--total_steps", type=int, default=100)
     parser.add_argument("--learning_rate", type=float, default=0.7)
     parser.add_argument("--gamma", type=float, default=0.618)
     parser.add_argument("--epsilon", type=float, default=1)
     parser.add_argument("--max_epsilon", type=float, default=1)
-    parser.add_argument("--min_epsilon", type=float, default=0.01)
-    parser.add_argument("--decay_rate", type=float, default=0.005)
-    parser.add_argument("--save-model-interval", type=int, default=10)
+    parser.add_argument("--min_epsilon", type=float, default=0.3)
+    parser.add_argument("--decay_rate", type=float, default=0.001)
+    parser.add_argument("--save-model-interval", type=int, default=100)
     parser.add_argument("--seed", type=int, default=0)
     config = parser.parse_args()
     
@@ -37,10 +37,13 @@ if __name__ == '__main__':
     
     # q_table = np.load("runs/2021-03-14-20-41-36/model/episode-80.npy")
     
+    data = []
+    
     for episode in tqdm(range(config.total_episodes), ascii=True, desc="Episode Progress", position=0, ncols=100):
         
         state = env.reset()
         ep_reward = 0
+        status = 0
         
         if episode % config.save_model_interval == 0 and episode > 0:
             np.save(f"runs/{current_time}/model/episode-{episode}", q_table)
@@ -64,7 +67,11 @@ if __name__ == '__main__':
             
             state = new_state
             
+            if reward == 0:
+                status = 1
+            
             if done:
+                status = 2
                 tqdm.write("Mission Success!")
                 break
         
@@ -76,5 +83,10 @@ if __name__ == '__main__':
         tqdm.write(
             f"Episode {episode}\tLast reward: {ep_reward:.2f}\tAverage reward: {running_reward:.2f}"
         )
+        
+        data.append([episode, ep_reward, status])
     
     writer.close()
+    
+    with open(f"runs/{current_time}/data/data.plk", "wb") as f:
+        pickle.dump(data, f)

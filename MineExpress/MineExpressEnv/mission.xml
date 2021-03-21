@@ -3,9 +3,9 @@
     <About>
         <Summary>Mine Express</Summary>
     </About>
-    <ModSettings>
-        <PrioritiseOffscreenRendering>true</PrioritiseOffscreenRendering>
-    </ModSettings>
+<!--    <ModSettings>-->
+<!--        <PrioritiseOffscreenRendering>true</PrioritiseOffscreenRendering>-->
+<!--    </ModSettings>-->
     <ServerSection>
         <ServerInitialConditions>
             <Time>

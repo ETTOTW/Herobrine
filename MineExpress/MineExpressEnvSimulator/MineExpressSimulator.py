@@ -108,7 +108,7 @@ class MineExpressSimulator(gym.Env):
         x, y = 2*x+1, 2*y + 1
         
         obs = [self.map[x-1][y], self.map[x+1][y], self.map[x][y+1], self.map[x][y-1]]
-        print(obs)
+        # print(obs)
         
         movement = [x != b" " for x in obs]
         cost = [-1 if x == b"-" else -4 for x in obs]

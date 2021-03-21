@@ -1,5 +1,5 @@
-import gym, ray, torch
-import math, time, MalmoUtils
+import gym
+import time, MalmoUtils
 import numpy as np
 import json
 from gym.spaces import Discrete
@@ -68,6 +68,7 @@ class MineExpress(gym.Env):
         if world_state.is_mission_running:
             time.sleep(0.1)
             self.mission.sendCommand("quit")
+            time.sleep(0.2)
         
         self.mission.initMalmo(self.getMission(), "MineExpress")
         
@@ -77,7 +78,7 @@ class MineExpress(gym.Env):
     
     def step(self, action: int):
         movement_list, cost_list = self.getObservation()
-
+        
         reward = 0
         if action < 4:
             reward = cost_list[action]
@@ -87,10 +88,10 @@ class MineExpress(gym.Env):
             self.agent_loc[0] = max(self.agent_loc[0] - 1, 0)
             self.actionHandler(action)
         elif action == 1 and movement_list[1]:
-            self.agent_loc[0] = min(self.agent_loc[0] + 1, self.max_x-1)
+            self.agent_loc[0] = min(self.agent_loc[0] + 1, self.max_x - 1)
             self.actionHandler(action)
         elif action == 2 and movement_list[2]:
-            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_z-1)
+            self.agent_loc[1] = min(self.agent_loc[1] + 1, self.max_z - 1)
             self.actionHandler(action)
         elif action == 3 and movement_list[3]:
             self.agent_loc[1] = max(self.agent_loc[1] - 1, 0)
@@ -115,36 +116,29 @@ class MineExpress(gym.Env):
             else:
                 reward = -10
         
-        # time.sleep(0.3)
-        # world_state = self.mission.getWorldState()
-        # if not world_state.is_mission_running:
-        #     done = True
-        # for r in world_state.rewards:
-        #     reward += r.getValue()
-        
         self.last_action = action
         self.state = self.getStateNumber(self.agent_loc, self.package_loc, self.package_dest)
         
         return self.state, reward, done, f"last action: {self.last_action}"
     
-    def actionHandler(self, action):
-        useChestProcess = \
-            ["use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2"]
-        
-        if action in {0, 1, 2, 3}:
-            x, y = self.agent_loc
-            x, y = self.absolute_position[x][y]
-            self.mission.sendCommand(f"tp {x} 2 {y}")
-            # time.sleep(0.1)
-        
-        elif action in {4, 5}:
-            for cmd in useChestProcess:
-                self.mission.sendCommand(cmd)
-                # time.sleep(0.1)
+    # def actionHandler(self, action):
+    #     useChestProcess = \
+    #         ["use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2"]
+    #
+    #     if action in {0, 1, 2, 3}:
+    #         x, y = self.agent_loc
+    #         x, y = self.absolute_position[x][y]
+    #         self.mission.sendCommand(f"tp {x} 2 {y}")
+    #         # time.sleep(0.1)
+    #
+    #     elif action in {4, 5}:
+    #         for cmd in useChestProcess:
+    #             self.mission.sendCommand(cmd)
+    #             # time.sleep(0.1)
     
     # def actionHandler(self, action):
     #     useChestProcess = \
-    #         ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 0"]
+    #         ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 45"]
     #
     #     if action == 0:
     #         self.mission.sendCommand("setYaw 180")
@@ -175,13 +169,30 @@ class MineExpress(gym.Env):
     #             self.mission.sendCommand(cmd)
     #             time.sleep(0.1)
     
+    
+    def actionHandler(self, action):
+        useChestProcess = \
+            ["setPitch 90", "use 1", "use 0", "swapInventoryItems chest:0 0", "tpy 10", "tpy 2", "setPitch 60"]
+
+        if action == 0:
+            self.mission.sendCommand("movenorth 1", 10)
+        elif action == 1:
+            self.mission.sendCommand("movesouth 1", 10)
+        elif action == 2:
+            self.mission.sendCommand("moveeast 1", 10)
+        elif action == 3:
+            self.mission.sendCommand("movewest 1", 10)
+        elif action in {4, 5}:
+            for cmd in useChestProcess:
+                self.mission.sendCommand(cmd)
+    
     def getMission(self):
         start_pos = self.absolute_position[self.agent_loc[0]][self.agent_loc[1]]
         
         mission = MalmoUtils.MissionHandler("mission.xml")
         mission.set("FileWorldGenerator", src=f"{os.getcwd()}\\MineExpressWorld")
         mission.insert("DrawingDecorator", "DrawBlock", type="redstone_block", x=f"{self.package_loc}", y="2", z="-10")
-        mission.insert("AgentStart", "Placement", x=f"{start_pos[0]}", y=f"{2}", z=f"{start_pos[1]}", pitch="90",
+        mission.insert("AgentStart", "Placement", x=f"{start_pos[0]}", y=f"{2}", z=f"{start_pos[1]}", pitch="60",
                        yaw="180")
         return str(mission)
     
@@ -205,18 +216,11 @@ class MineExpress(gym.Env):
                 else:
                     grid = grid[0]
                 
-                # path_list = {"stone", "soul_sand"}
-                # north = True if grid[0][3] in path_list else False
-                # south = True if grid[6][3] in path_list else False
-                # east = True if grid[3][6] in path_list else False
-                # west = True if grid[3][0] in path_list else False
-                
                 obs = [grid[0][3], grid[6][3], grid[3][6], grid[3][0]]
                 
                 movement = [x in {"stone", "soul_sand"} for x in obs]
                 cost = [-1 if x == "stone" else -4 for x in obs]
                 
-                # return (north, south, east, west)
                 return movement, cost
             world_state = self.mission.getWorldState()
         raise
