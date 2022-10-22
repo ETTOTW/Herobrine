@@ -228,10 +228,6 @@ Figure 9 is the test reward comparison between Dijkstra's algorithm and the q-le
 
 #### **Qualitative**
 
-<div align="center">
-<iframe width="854" height="480" src="https://www.youtube.com/embed/2IK6h5-7R-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
-
 For qualitative evaluation, we can simply monitor the action, the reaching rate, and the final score of the agent. We will monitor the action of the agent visually to see whether our agent always chooses the best behavior. Also, if the agent has a high reward with a great scale of score improvement, it means that the agent is most likely to choose the better action to reach the goal, which is a perfect indication in the qualitative evaluation. 
 
 The video above shows the performance of the random movement and q-learning agent. We can see the random movement agent chooses actions randomly and cannot complete the mission. In contrast, we can see that our well-trained q-learning agent chooses the path that leads to the highest reward. For example, in the first episode, when there is a soul sand path in front of our agent, it will choose to take a detour (take three stone paths) because a soul sand path costs 4, while three stone paths only cost 3. However, in the third episode, our agent also chooses the soul sand path and failed to find the optimal path. We believe that our agent achieves a local optimum during the training, and we may get a better result with a larger minimum epsilon or smaller decay rate.
@@ -243,15 +239,6 @@ The video above shows the performance of the random movement and q-learning agen
 2. Increase the complexity of the problem to make the problem more similar to the real situation.
    
 3. Try more reinforcement algorithms, such as DQN, A3C, to solve the problem.
-
-
-## Contribution
-
- - Jason Li: Research in different RL algorithms; attempt in the [q-learning algorithm (not used)](https://github.com/yachilee/Herobrine/blob/main/MineExpress/draft2.py); write and revise the [final report](https://yachilee.github.io/Herobrine/final.html); record videos; update [Github page](https://github.com/yachilee/Herobrine) with various visual effects; Collect and record [meeting logs](https://yachilee.github.io/Herobrine/team.html).
-
- - Yachi Lee: Implement [Dijkstra algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_dijkstra2.py); attempt in the [q-learning algorithm](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_ql_v1.py); make the [slide for the final video](https://docs.google.com/presentation/d/17Mrflf8M_dEWAVq4DpzN-jGSlUjPPT_Wu_aerAZTE9c/edit?usp=sharing); write approach and motivation and revise other parts of the [final report](https://yachilee.github.io/Herobrine/final.html); record video; make the sanity check, and the [baseline for a status report](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Herobrine_baseline.py).
-
- - Yilong Huang: Implement the [q-learning agent](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Tabular_Q_Learning/main.py), [MalmoUtils](https://github.com/yachilee/Herobrine/blob/main/MineExpress/MalmoUtils.py), [MineExpressEnv](https://github.com/yachilee/Herobrine/tree/main/MineExpress/MineExpressEnv), [MineExpressEnvSimulator](https://github.com/yachilee/Herobrine/tree/main/MineExpress/MineExpressEnvSimulator); attempt in the [deep q-learning agent](https://github.com/yachilee/Herobrine/blob/main/MineExpress/Deep_Q_Learning/DQN_Main.py); write the evaluation and revise other parts of the [final report](https://yachilee.github.io/Herobrine/final.html); edit and record videos; data analysis and visualization; implement a [demo ppo agent for the status report](https://github.com/yachilee/Herobrine/blob/main/MineExpress/PPO/PPO_Agent_Main.py).
 
 
 ## References
