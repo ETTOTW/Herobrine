@@ -3,9 +3,6 @@ layout: default
 title:  Status
 ---
 
-### Video Summary
-<iframe width="854" height="480" src="https://www.youtube.com/embed/gAnfkpYpiSI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ### Project summary
 Our project aims to find a path that minimizes the time travel to a randomized destination. Our training environment is a 16 * 16 grid map. Each grid is a 4 * 4 hollow squares, whose edges consist of soul sand or diamond block, to give agents different speed properties in the different paths. We train our agents by machine learning algorithms to reach our goal.
 
@@ -18,10 +15,6 @@ Block Type:
 - Speed Down: Soul Sand
 
 <img src="image/blocks_type.png">
-
-A simple demo for the final project:
-
-<iframe width="854" height="480" src="https://www.youtube.com/embed/99FBifaPOyQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Approach
 We use the q-learning algorithm and ε-greedy method to train our agents. Our q-table has a state number that corresponds to the non-air block number. We have 4 actions that include up, down, left, and right. 
